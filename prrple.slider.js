@@ -2,8 +2,8 @@
 
 	AUTHOR:		Alex Bimpson
 	NAME:		Prrple Slider
-	VERSION:	1.9
-	UPDATED:	2014-11-30
+	VERSION:	1.10
+	UPDATED:	2015-04-20
 
 */
 
@@ -442,6 +442,7 @@
 						//horizontal
 						if(options.loop==true && options.loopSeamless==true && s.current==1 && prev==s.total && direction!='left'){
 							//seamless slide right
+							console.log(slideNo);
 							var dist = '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							s.div.slides.stop(true).animate({
 								left:dist
@@ -455,11 +456,11 @@
 								left:dist
 							},time,options.easing);
 						}else{
-							//general slide right
+							//general slide
 							var dist = '-'+(((slideNo-1) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-							if(prev==1){
+							if(direction=='right' && prev==1){
 								s.div.slides.stop(true).css({
-									//left: 0
+									left: 0
 								});
 							};
 							s.div.slides.stop(true).animate({
