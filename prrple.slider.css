@@ -1,0 +1,19 @@
+
+
+
+/********** PRRPLE SLIDER **********/
+.slider { display:block; position:relative; }
+.slider .slider_area{ display:block; position:relative; width:100%; overflow:hidden; }
+.slider .slides{ display:block; position:relative; }
+.slider .slide{ display:block; position:relative; float:left; }
+.slider.fade .slide{ display:block; position:absolute; top:0; left:0; width:100%; }
+.slider.vertical .slide{ float:none; }
+.slider .slide_clear{ display:block; position:relative; height:0; clear:both; }
+.slider .slide_left,.slider .slide_right{ display:none; cursor:pointer; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
+.slider .slide_left.slide_left_inactive, .slider .slide_right.slide_right_inactive{	cursor:default; }
+.slider .slider_nav{ display:block; position:relative; text-align:center; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
+.slider .slider_navdot{ display:inline-block; width:10px; height:10px; background:#DDD; }
+.slider .slider_navdot.current{ background:#AAA; }
+.slider .slider_controls,.slider .slider_play,.slider .slider_pause{ display:none; }
+
+
