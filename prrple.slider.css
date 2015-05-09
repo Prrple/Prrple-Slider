@@ -13,7 +13,7 @@
 .slider .slide_left.slide_left_inactive, .slider .slide_right.slide_right_inactive{	cursor:default; }
 .slider .slider_nav{ display:block; position:relative; text-align:center; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
 .slider .slider_navdot{ display:inline-block; width:10px; height:10px; background:#DDD; }
-.slider .slider_navdot.current{ background:#AAA; }
-.slider .slider_controls,.slider .slider_play,.slider .slider_pause{ display:none; }
+.slider .slider_controls{ display:none; }
+.slider .slider_play.hidden,.slider .slider_pause.hidden{ display:none !important; }
 
 

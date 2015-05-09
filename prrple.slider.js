@@ -359,18 +359,19 @@
 					$(s.div.controls).hide();
 				}else{
 					$(s.div.controls).show();
-					$(s.div.pause).show();
+					$(s.div.play).addClass('hidden');
+					$(s.div.pause).removeClass('hidden');
 					//pause
 					$(s.div.pause).unbind('click').click(function(){
-						$(s.div.pause).hide();
-						$(s.div.play).show();
+						$(s.div.pause).addClass('hidden');
+						$(s.div.play).removeClass('hidden');
 						s.paused = true;
 						return false;
 					});
 					//resume
 					$(s.div.play).unbind('click').click(function(){
-						$(s.div.play).hide();
-						$(s.div.pause).show();
+						$(s.div.play).addClass('hidden');
+						$(s.div.pause).removeClass('hidden');
 						s.paused = false;
 						return false;
 					});
