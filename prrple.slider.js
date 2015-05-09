@@ -1,11 +1,17 @@
+
+
+
 /*
 
 	AUTHOR:		Alex Bimpson
 	NAME:		Prrple Slider
-	VERSION:	1.10
-	UPDATED:	2015-04-20
+	WEB:		www.prrple.com
+	REQUIRES:	jQuery, jQuery TouchSwipe
+	VERSION:	1.11
+	UPDATED:	2015-05-09
 
 */
+
 
 
 /************************************************************************************************************/
@@ -110,6 +116,7 @@
 			total: 0,
 			current: 1,
 			left_current: 0,
+			paused: false,
 			//left_abs: 0,
 			
 			//INITIALISE
@@ -132,6 +139,8 @@
 				s.add_dots();
 				//NAV ARROWS
 				s.add_arrows();
+				//NAV CONTROLS
+				s.add_controls();
 				//HIDE RELEVANT ARROWS
 				s.hide_arrows();
 				//GO TO INITIAL SLIDE
@@ -152,6 +161,9 @@
 				s.div.nav = s.slider.find('.slider_nav');
 				s.div.left = s.slider.find('.slide_left');
 				s.div.right = s.slider.find('.slide_right');
+				s.div.controls = s.slider.find('.slider_controls');
+				s.div.play = s.slider.find('.slider_play');
+				s.div.pause = s.slider.find('.slider_pause');
 			},
 			
 			//GET INFO
@@ -341,6 +353,30 @@
 				};
 			},
 			
+			//ADD CONTROLS
+			add_controls: function(){
+				if(s.total <= 1){
+					$(s.div.controls).hide();
+				}else{
+					$(s.div.controls).show();
+					$(s.div.pause).show();
+					//pause
+					$(s.div.pause).unbind('click').click(function(){
+						$(s.div.pause).hide();
+						$(s.div.play).show();
+						s.paused = true;
+						return false;
+					});
+					//resume
+					$(s.div.play).unbind('click').click(function(){
+						$(s.div.play).hide();
+						$(s.div.pause).show();
+						s.paused = false;
+						return false;
+					});
+				};
+			},
+			
 			//HIDE RELEVANT ARROWS
 			hide_arrows: function(){
 				if(options.loop==false && options.firstSlide==1){
@@ -405,7 +441,9 @@
 				if(options.autoPlay == true){
 					clearInterval(s.autoplay_int);
 					s.autoplay_int = setInterval(function(){
-						s.slide_right();
+						if(s.paused==false){
+							s.slide_right();
+						};
 					},options.autoPlayInterval);
 				};
 			},
@@ -442,7 +480,6 @@
 						//horizontal
 						if(options.loop==true && options.loopSeamless==true && s.current==1 && prev==s.total && direction!='left'){
 							//seamless slide right
-							console.log(slideNo);
 							var dist = '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							s.div.slides.stop(true).animate({
 								left:dist
@@ -548,10 +585,5 @@
 	
 	
 })(jQuery);
-
-
-
-
-
 
 
