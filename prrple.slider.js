@@ -38,6 +38,7 @@
 		//AUTOPLAY
 		autoPlay:			false,				//play slider automatically?
 		autoPlayInterval:	4000,				//how often to automatically switch between slides
+		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		firstSlide:			1,					//the slide number to start on
@@ -61,9 +62,9 @@
 	
 	
 	/******************** UPDATE SLIDER ********************/
-	$.fn.prrpleSliderGoTo = function(goTo){
+	$.fn.prrpleSliderGoTo = function(goTo,skip){
 		try{
-			$(this).data('prrpleSlider').goToSlide(goTo);
+			$(this).data('prrpleSlider').goToSlide(goTo,skip);
 		}catch(e){};
 	};
 	$.fn.prrpleSliderLeft = function(){
@@ -74,6 +75,16 @@
 	$.fn.prrpleSliderRight = function(){
 		try{
 			$(this).data('prrpleSlider').slideRight();
+		}catch(e){};
+	};
+	$.fn.prrpleSliderPause = function(){
+		try{
+			$(this).data('prrpleSlider').pauseSlider();
+		}catch(e){};
+	};
+	$.fn.prrpleSliderPlay = function(){
+		try{
+			$(this).data('prrpleSlider').playSlider();
 		}catch(e){};
 	};
 	$.fn.prrpleSliderSwipe = function(event, phase, direction, distance){
@@ -146,6 +157,10 @@
 				//GO TO INITIAL SLIDE
 				if(options.firstSlide!=1){
 					s.goTo(options.firstSlide,true);
+				};
+				//CALLBACK
+				if(typeof(options.callback)==='function'){
+					options.callback(s.current,s.total);
 				};
 				//AUTO PLAY INTERVAL
 				s.autoplay();
@@ -397,6 +412,9 @@
 							s.goTo(s.total);
 						};
 					};
+					if(options.pauseOnClick==true){
+						s.paused = true;
+					};
 				};
 			},
 			
@@ -409,6 +427,9 @@
 						if(options.loop == true){
 							s.goTo(1)
 						};
+					};
+					if(options.pauseOnClick==true){
+						s.paused = true;
 					};
 				};
 			},
@@ -555,14 +576,20 @@
 		s.init();
 		
 		//UPDATE FUNCTIONS
-		this.goToSlide = function(goTo){
-			s.goTo(goTo);
+		this.goToSlide = function(goTo,skip){
+			s.goTo(goTo,skip);
 		};
 		this.slideLeft = function(){
 			s.slide_left();
 		};
 		this.slideRight = function(){
 			s.slide_right();
+		};
+		this.pauseSlider = function(){
+			s.paused = true;
+		};
+		this.playSlider = function(){
+			s.paused = false;
 		};
 		this.swipe = function(event, phase, direction, distance){
 			s.swipe(event, phase, direction, distance);
