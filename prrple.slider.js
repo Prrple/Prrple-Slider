@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.11
-	UPDATED:	2015-05-09
+	VERSION:	1.12
+	UPDATED:	2015-05-17
 
 */
 
@@ -473,7 +473,7 @@
 			//GO TO SLIDE
 			goTo: function(slideNo,skip,direction){
 				//time
-				if(typeof(skip)==='boolean' && skip==true){
+				if(skip==true){
 					var time = 0;
 				}else{
 					var time = options.transitionTime;
@@ -488,7 +488,7 @@
 				//animate slider
 				if(options.transition == 'fade'){
 					//fade
-					s.slider.find('.slide').fadeOut(options.transitionTime);
+					s.slider.find('.slide').fadeOut(time);
 					s.slider.find('.slide:nth-child('+(slideNo)+')').fadeIn(time);
 				}else if(options.transition == 'slide'){
 					//slide
