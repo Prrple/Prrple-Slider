@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.12
-	UPDATED:	2015-05-17
+	VERSION:	1.13
+	UPDATED:	2015-05-20
 
 */
 
@@ -403,7 +403,7 @@
 			},
 			
 			//SLIDE LEFT
-			slide_left: function(){
+			slide_left: function(skip_pause){
 				if(s.total>1 && !s.div.left.hasClass('slide_left_inactive')){
 					if(s.current > 1){
 						s.goTo(s.current-1,false,'left')
@@ -412,14 +412,14 @@
 							s.goTo(s.total);
 						};
 					};
-					if(options.pauseOnClick==true){
+					if(skip_pause!=true && options.pauseOnClick==true){
 						s.paused = true;
 					};
 				};
 			},
 			
 			//SLIDE RIGHT
-			slide_right: function(){
+			slide_right: function(skip_pause){
 				if(s.total>1 && !s.div.right.hasClass('slide_right_inactive')){
 					if(s.current < s.total){
 						s.goTo(s.current+1,false,'right')
@@ -428,7 +428,7 @@
 							s.goTo(1)
 						};
 					};
-					if(options.pauseOnClick==true){
+					if(skip_pause!=true && options.pauseOnClick==true){
 						s.paused = true;
 					};
 				};
@@ -464,7 +464,7 @@
 					clearInterval(s.autoplay_int);
 					s.autoplay_int = setInterval(function(){
 						if(s.paused==false){
-							s.slide_right();
+							s.slide_right(true);
 						};
 					},options.autoPlayInterval);
 				};
