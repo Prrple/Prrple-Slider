@@ -233,7 +233,6 @@
 						s.div.slides.css({
 							width: (s.width * (s.total+1))
 						});
-						console.log(s.div.slider_area.innerHeight());
 						s.height = s.div.slider_area.innerHeight();
 					};
 					var h3 = s.slider.height();
