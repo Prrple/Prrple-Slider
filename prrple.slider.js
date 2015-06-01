@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.14
-	UPDATED:	2015-05-27
+	VERSION:	1.15
+	UPDATED:	2015-06-1
 
 */
 
@@ -437,8 +437,10 @@
 				if(phase=='move'){
 					if(direction=='left'){
 						var d = -distance;
-					}else{
+					}else if(direction=='right'){
 						var d = distance;
+					}else{
+						var d = 0;
 					};
 					s.div.slides.stop().css({
 						left: (s.left_current+d)
@@ -514,11 +516,11 @@
 						}else{
 							//general slide
 							var dist = '-'+(((slideNo-1) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-							if(direction=='right' && prev==1){
+							/*if(direction=='right' && prev==1){
 								s.div.slides.stop(true).css({
 									left: 0
 								});
-							};
+							};*/
 							s.div.slides.stop(true).animate({
 								left:dist
 							},time,options.easing);
