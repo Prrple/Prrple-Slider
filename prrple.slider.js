@@ -128,10 +128,13 @@
 			current: 1,
 			left_current: 0,
 			paused: false,
+			transforms: false,
 			//left_abs: 0,
 			
 			//INITIALISE
 			init: function(){
+				//TRANSFORMS
+				s.transforms = (typeof(Modernizr)!=='undefined'?Modernizr.csstransforms:false);
 				//GET DIVS
 				s.get_divs();
 				//GET INFO
@@ -200,7 +203,7 @@
 				if(options.direction == 'vertical'){
 					s.slider.addClass('vertical');
 				}else{
-					
+					s.slider.removeClass('vertical');
 				};
 			},
 			
@@ -445,9 +448,15 @@
 						}else{
 							var d = 0;
 						};
-						s.div.slides.stop().css({
-							top: (s.left_current+d)
-						});
+						if(s.transforms){
+							s.div.slides.stop().css({
+								top: (s.left_current+d)
+							});
+						}else{
+							s.div.slides.stop().css({
+								top: (s.left_current+d)
+							});
+						};
 					}else{
 						if(direction=='left'){
 							var d = -distance;
@@ -456,9 +465,15 @@
 						}else{
 							var d = 0;
 						};
-						s.div.slides.stop().css({
-							left: (s.left_current+d)
-						});
+						if(s.transforms){
+							s.div.slides.stop().css({
+								left: (s.left_current+d)
+							});
+						}else{
+							s.div.slides.stop().css({
+								left: (s.left_current+d)
+							});
+						};
 					};
 				}else if(phase=='end' && orientation=='vertical' && direction=="down" && s.current>1){
 					s.slide_left(true,true);
@@ -470,13 +485,25 @@
 					s.slide_right(true,true);
 				}else if(direction!=null){
 					if(orientation=='vertical'){
-						s.div.slides.stop().animate({
-							top: s.left_current
-						},options.transitionTime,options.easing);
+						if(s.transforms){
+							s.div.slides.stop().animate({
+								top: s.left_current
+							},options.transitionTime,options.easing);
+						}else{
+							s.div.slides.stop().animate({
+								top: s.left_current
+							},options.transitionTime,options.easing);
+						};
 					}else{
-						s.div.slides.stop().animate({
-							left: s.left_current
-						},options.transitionTime,options.easing);
+						if(s.transforms){
+							s.div.slides.stop().animate({
+								left: s.left_current
+							},options.transitionTime,options.easing);
+						}else{
+							s.div.slides.stop().animate({
+								left: s.left_current
+							},options.transitionTime,options.easing);
+						};
 					};
 				};
 			},
@@ -521,56 +548,108 @@
 						if(options.loop==true && options.loopSeamless==true && s.current==1 && prev==s.total && direction!='left'){
 							//seamless slide right
 							var dist = '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-							s.div.slides.stop(true).animate({
-								top:dist
-							},time,options.easing);
+							if(s.transforms){
+								s.div.slides.stop(true).animate({
+									top:dist
+								},time,options.easing);
+							}else{
+								s.div.slides.stop(true).animate({
+									top:dist
+								},time,options.easing);
+							};
 						}else if(options.loop==true && options.loopSeamless==true && s.current==s.total && prev==1 && direction!='right'){
 							//seamless slide left
 							var dist = '-'+(((slideNo-1) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-							s.div.slides.stop(true).css({
-								top: '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px'
-							}).animate({
-								top:dist
-							},time,options.easing);
+							if(s.transforms){
+								s.div.slides.stop(true).css({
+									top: '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px'
+								}).animate({
+									top:dist
+								},time,options.easing);
+							}else{
+								s.div.slides.stop(true).css({
+									top: '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px'
+								}).animate({
+									top:dist
+								},time,options.easing);
+							};
 						}else{
 							//general slide
 							var dist = '-'+(((slideNo-1) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(swiping!=true && direction=='right' && prev==1){
-								s.div.slides.stop(true).css({
-									top: 0
-								});
+								if(s.transforms){
+									s.div.slides.stop(true).css({
+										top: 0
+									});
+								}else{
+									s.div.slides.stop(true).css({
+										top: 0
+									});
+								};
 							};
-							s.div.slides.stop(true).animate({
-								top:dist
-							},time,options.easing);
+							if(s.transforms){
+								s.div.slides.stop(true).animate({
+									top:dist
+								},time,options.easing);
+							}else{
+								s.div.slides.stop(true).animate({
+									top:dist
+								},time,options.easing);
+							};
 						};
 					}else{
 						//horizontal
 						if(options.loop==true && options.loopSeamless==true && s.current==1 && prev==s.total && direction!='left'){
 							//seamless slide right
 							var dist = '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-							s.div.slides.stop(true).animate({
-								left:dist
-							},time,options.easing);
+							if(s.transforms){
+								s.div.slides.stop(true).animate({
+									left:dist
+								},time,options.easing);
+							}else{
+								s.div.slides.stop(true).animate({
+									left:dist
+								},time,options.easing);
+							};
 						}else if(options.loop==true && options.loopSeamless==true && s.current==s.total && prev==1 && direction!='right'){
 							//seamless slide left
 							var dist = '-'+(((slideNo-1) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-							s.div.slides.stop(true).css({
-								left: '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px'
-							}).animate({
-								left:dist
-							},time,options.easing);
+							if(s.transforms){
+								s.div.slides.stop(true).css({
+									left: '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px'
+								}).animate({
+									left:dist
+								},time,options.easing);
+							}else{
+								s.div.slides.stop(true).css({
+									left: '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px'
+								}).animate({
+									left:dist
+								},time,options.easing);
+							};
 						}else{
 							//general slide
 							var dist = '-'+(((slideNo-1) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(swiping!=true && direction=='right' && prev==1){
-								s.div.slides.stop(true).css({
-									left: 0
-								});
+								if(s.transforms){
+									s.div.slides.stop(true).css({
+										left: 0
+									});
+								}else{
+									s.div.slides.stop(true).css({
+										left: 0
+									});
+								};
 							};
-							s.div.slides.stop(true).animate({
-								left:dist
-							},time,options.easing);
+							if(s.transforms){
+								s.div.slides.stop(true).animate({
+									left:dist
+								},time,options.easing);
+							}else{
+								s.div.slides.stop(true).animate({
+									left:dist
+								},time,options.easing);
+							};
 						};
 					};
 				};
