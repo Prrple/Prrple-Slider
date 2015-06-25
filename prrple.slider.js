@@ -87,9 +87,9 @@
 			$(this).data('prrpleSlider').playSlider();
 		}catch(e){};
 	};
-	$.fn.prrpleSliderSwipe = function(event, phase, direction, distance){
+	$.fn.prrpleSliderSwipe = function(event, phase, direction, distance, orientation){
 		try{
-			$(this).data('prrpleSlider').swipe(event, phase, direction, distance);
+			$(this).data('prrpleSlider').swipe(event, phase, direction, distance, orientation);
 		}catch(e){};
 	};
 	$.fn.prrpleSliderResize = function(){
@@ -402,13 +402,13 @@
 			},
 			
 			//SLIDE LEFT
-			slide_left: function(skip_pause){
+			slide_left: function(skip_pause,swiping){
 				if(s.total>1 && !s.div.left.hasClass('slide_left_inactive')){
 					if(s.current > 1){
-						s.goTo(s.current-1,false,'left')
+						s.goTo(s.current-1,false,'left',swiping)
 					}else{
 						if(options.loop == true){
-							s.goTo(s.total);
+							s.goTo(s.total,false,'left',swiping);
 						};
 					};
 					if(skip_pause!=true && options.pauseOnClick==true){
@@ -418,13 +418,13 @@
 			},
 			
 			//SLIDE RIGHT
-			slide_right: function(skip_pause){
+			slide_right: function(skip_pause,swiping){
 				if(s.total>1 && !s.div.right.hasClass('slide_right_inactive')){
 					if(s.current < s.total){
-						s.goTo(s.current+1,false,'right')
+						s.goTo(s.current+1,false,'right',swiping)
 					}else{
 						if(options.loop == true){
-							s.goTo(1)
+							s.goTo(1,false,'right',swiping)
 						};
 					};
 					if(skip_pause!=true && options.pauseOnClick==true){
@@ -434,27 +434,50 @@
 			},
 			
 			//SWIPE
-			swipe: function(event, phase, direction, distance){
-				//console.log(phase+' - '+direction+' - '+l2);
+			swipe: function(event, phase, direction, distance, orientation){
+				//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
 				if(phase=='move'){
-					if(direction=='left'){
-						var d = -distance;
-					}else if(direction=='right'){
-						var d = distance;
+					if(orientation=='vertical'){
+						if(direction=='up'){
+							var d = -distance;
+						}else if(direction=='down'){
+							var d = distance;
+						}else{
+							var d = 0;
+						};
+						s.div.slides.stop().css({
+							top: (s.left_current+d)
+						});
 					}else{
-						var d = 0;
+						if(direction=='left'){
+							var d = -distance;
+						}else if(direction=='right'){
+							var d = distance;
+						}else{
+							var d = 0;
+						};
+						s.div.slides.stop().css({
+							left: (s.left_current+d)
+						});
 					};
-					s.div.slides.stop().css({
-						left: (s.left_current+d)
-					});
-				}else if(phase=='end' && direction=="right" && s.current>1){
-					s.slide_left();
-				}else if(phase=='end' && direction=="left" && s.current<s.total){
-					s.slide_right();
+				}else if(phase=='end' && orientation=='vertical' && direction=="down" && s.current>1){
+					s.slide_left(true,true);
+				}else if(phase=='end' && orientation=='vertical' && direction=="up" && s.current<s.total){
+					s.slide_right(true,true);
+				}else if(phase=='end' && orientation!='vertical' && direction=="right" && s.current>1){
+					s.slide_left(true,true);
+				}else if(phase=='end' && orientation!='vertical' && direction=="left" && s.current<s.total){
+					s.slide_right(true,true);
 				}else if(direction!=null){
-					s.div.slides.stop().animate({
-						left: s.left_current
-					},options.transitionTime,options.easing);
+					if(orientation=='vertical'){
+						s.div.slides.stop().animate({
+							top: s.left_current
+						},options.transitionTime,options.easing);
+					}else{
+						s.div.slides.stop().animate({
+							left: s.left_current
+						},options.transitionTime,options.easing);
+					};
 				};
 			},
 			
@@ -472,7 +495,7 @@
 			},
 			
 			//GO TO SLIDE
-			goTo: function(slideNo,skip,direction){
+			goTo: function(slideNo,skip,direction,swiping){
 				//time
 				if(skip==true){
 					var time = 0;
@@ -495,10 +518,32 @@
 					//slide
 					if(options.direction == 'vertical'){
 						//vertical
-						var dist = '-'+(((slideNo-1) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-						s.div.slides.stop(true).animate({
-							top: dist
-						},time,options.easing);
+						if(options.loop==true && options.loopSeamless==true && s.current==1 && prev==s.total && direction!='left'){
+							//seamless slide right
+							var dist = '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
+							s.div.slides.stop(true).animate({
+								top:dist
+							},time,options.easing);
+						}else if(options.loop==true && options.loopSeamless==true && s.current==s.total && prev==1 && direction!='right'){
+							//seamless slide left
+							var dist = '-'+(((slideNo-1) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
+							s.div.slides.stop(true).css({
+								top: '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px'
+							}).animate({
+								top:dist
+							},time,options.easing);
+						}else{
+							//general slide
+							var dist = '-'+(((slideNo-1) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
+							if(swiping!=true && direction=='right' && prev==1){
+								s.div.slides.stop(true).css({
+									top: 0
+								});
+							};
+							s.div.slides.stop(true).animate({
+								top:dist
+							},time,options.easing);
+						};
 					}else{
 						//horizontal
 						if(options.loop==true && options.loopSeamless==true && s.current==1 && prev==s.total && direction!='left'){
@@ -518,7 +563,7 @@
 						}else{
 							//general slide
 							var dist = '-'+(((slideNo-1) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
-							if(direction=='right' && prev==1){
+							if(swiping!=true && direction=='right' && prev==1){
 								s.div.slides.stop(true).css({
 									left: 0
 								});
@@ -595,8 +640,8 @@
 		this.playSlider = function(){
 			s.paused = false;
 		};
-		this.swipe = function(event, phase, direction, distance){
-			s.swipe(event, phase, direction, distance);
+		this.swipe = function(event, phase, direction, distance, orientation){
+			s.swipe(event, phase, direction, distance, orientation);
 		};
 		this.resizeSlider = function(){
 			//dimensions
