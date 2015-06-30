@@ -87,9 +87,9 @@
 			$(this).data('prrpleSlider').playSlider();
 		}catch(e){};
 	};
-	$.fn.prrpleSliderSwipe = function(event, phase, direction, distance, orientation){
+	$.fn.prrpleSliderSwipe = function(event, phase, direction, distance, orientation, callback){
 		try{
-			$(this).data('prrpleSlider').swipe(event, phase, direction, distance, orientation);
+			$(this).data('prrpleSlider').swipe(event, phase, direction, distance, orientation, callback);
 		}catch(e){};
 	};
 	$.fn.prrpleSliderResize = function(){
@@ -437,7 +437,7 @@
 			},
 			
 			//SWIPE
-			swipe: function(event, phase, direction, distance, orientation){
+			swipe: function(event, phase, direction, distance, orientation, callback){
 				//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
 				if(phase=='move'){
 					if(orientation=='vertical'){
@@ -457,6 +457,10 @@
 								top: (s.left_current+d)
 							});
 						};
+						//callback
+						if(typeof(callback) == "function"){
+							callback(s.current,'move','vertical',(s.left_current+d));
+						};
 					}else{
 						if(direction=='left'){
 							var d = -distance;
@@ -473,6 +477,10 @@
 							s.div.slides.stop().css({
 								left: (s.left_current+d)
 							});
+						};
+						//callback
+						if(typeof(callback) == "function"){
+							callback(s.current,'move','horizontal',(s.left_current+d));
 						};
 					};
 				}else if(phase=='end' && orientation=='vertical' && direction=="down" && s.current>1){
@@ -719,8 +727,8 @@
 		this.playSlider = function(){
 			s.paused = false;
 		};
-		this.swipe = function(event, phase, direction, distance, orientation){
-			s.swipe(event, phase, direction, distance, orientation);
+		this.swipe = function(event, phase, direction, distance, orientation, callback){
+			s.swipe(event, phase, direction, distance, orientation, callback);
 		};
 		this.resizeSlider = function(){
 			//dimensions
