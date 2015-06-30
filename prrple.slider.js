@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.16
-	UPDATED:	2015-06-25
+	VERSION:	1.17
+	UPDATED:	2015-06-30
 
 */
 
@@ -42,7 +42,8 @@
 		//MISC
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		firstSlide:			1,					//the slide number to start on
-		callback:			null				//callback function after a slide changes
+		callback:			null,				//callback function after a slide changes
+		callback_end:		null				//callback function after a slide changes and animation completes
 	};
 	
 	
@@ -126,6 +127,8 @@
 			//STATUS
 			total: 0,
 			current: 1,
+			prev: 1,
+			next: 1,
 			left_current: 0,
 			paused: false,
 			transforms: false,
@@ -166,6 +169,9 @@
 				//CALLBACK
 				if(typeof(options.callback)==='function'){
 					options.callback(s.current,s.total);
+				};
+				if(typeof(options.callback_end)==='function'){
+					options.callback_end(s.current,s.total);
 				};
 				//AUTO PLAY INTERVAL
 				s.autoplay();
@@ -439,7 +445,12 @@
 			//SWIPE
 			swipe: function(event, phase, direction, distance, orientation, callback){
 				//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
-				if(phase=='move'){
+				if(phase=='start'){
+					//callback
+					if(typeof(callback) == "function"){
+						callback(s.current,s.total,phase,direction,distance);
+					};
+				}else if(phase=='move'){
 					if(orientation=='vertical'){
 						if(direction=='up'){
 							var d = -distance;
@@ -459,7 +470,7 @@
 						};
 						//callback
 						if(typeof(callback) == "function"){
-							callback(s.current,'move','vertical',(s.left_current+d));
+							callback(s.current,s.total,phase,direction,distance,(s.left_current+d));
 						};
 					}else{
 						if(direction=='left'){
@@ -480,18 +491,33 @@
 						};
 						//callback
 						if(typeof(callback) == "function"){
-							callback(s.current,'move','horizontal',(s.left_current+d));
+							callback(s.current,s.total,phase,direction,distance,(s.left_current+d));
 						};
 					};
-				}else if(phase=='end' && orientation=='vertical' && direction=="down" && s.current>1){
-					s.slide_left(true,true);
-				}else if(phase=='end' && orientation=='vertical' && direction=="up" && s.current<s.total){
-					s.slide_right(true,true);
-				}else if(phase=='end' && orientation!='vertical' && direction=="right" && s.current>1){
-					s.slide_left(true,true);
-				}else if(phase=='end' && orientation!='vertical' && direction=="left" && s.current<s.total){
-					s.slide_right(true,true);
-				}else if(direction!=null){
+				}else if(phase=='end'){
+					if(orientation=='vertical' && direction=="down" && s.current>1){
+						s.slide_left(true,true);
+					}else if(orientation=='vertical' && direction=="up" && s.current<s.total){
+						s.slide_right(true,true);
+					}else if(orientation!='vertical' && direction=="right" && s.current>1){
+						s.slide_left(true,true);
+					}else if(orientation!='vertical' && direction=="left" && s.current<s.total){
+						s.slide_right(true,true);
+					}else{
+						var c = false;
+						cancel();
+					};
+					//callback
+					if(c!=false){
+						if(typeof(callback) == "function"){
+							callback(s.current,s.total,phase,direction,distance);
+						};
+					};
+				}else{
+					cancel();
+				};
+				function cancel(){
+					//cancel
 					if(orientation=='vertical'){
 						if(s.transforms){
 							s.div.slides.stop().animate({
@@ -512,6 +538,10 @@
 								left: s.left_current
 							},options.transitionTime,options.easing);
 						};
+					};
+					//callback
+					if(typeof(callback) == "function"){
+						callback(s.current,s.total,phase,direction,distance);
 					};
 				};
 			},
@@ -541,6 +571,22 @@
 				var prev = s.current;
 				//save
 				s.current = parseInt(slideNo);
+				s.prev = parseInt(slideNo-1);
+				s.next = parseInt(slideNo+1);
+				if(s.prev<1){
+					if(options.loop==true){
+						s.prev = s.total;
+					}else{
+						s.prev = 0;
+					};
+				};
+				if(s.next>s.total){
+					if(options.loop==true){
+						s.next = 1;
+					}else{
+						s.next = 0;
+					};
+				};
 				//update nav
 				s.div.nav.find('.slider_navdot').removeClass('current');
 				s.div.nav.find('#slider_navdot_'+slideNo).addClass('current');
@@ -662,8 +708,16 @@
 					};
 				};
 				//class
-				s.slider.find('.slide').removeClass('current');
-				s.slider.find('.slide:nth-child('+(slideNo)+')').addClass('current');
+				s.slider.find('.slide').removeClass('current prev next');
+				s.slider.find('.slide:nth-child('+(s.current)+')').addClass('current');
+				s.slider.find('.slide:nth-child('+(s.prev)+')').addClass('prev');
+				s.slider.find('.slide:nth-child('+(s.next)+')').addClass('next');
+				setTimeout(function(){
+					s.slider.find('.slide').removeClass('current2 prev2 next2');
+					s.slider.find('.slide:nth-child('+(s.current)+')').addClass('current2');
+					s.slider.find('.slide:nth-child('+(s.prev)+')').addClass('prev2');
+					s.slider.find('.slide:nth-child('+(s.next)+')').addClass('next2');
+				},time);
 				//interval
 				s.autoplay();
 				//arrows
@@ -687,6 +741,11 @@
 				if(typeof(options.callback)==='function'){
 					options.callback(slideNo,s.total);
 				};
+				setTimeout(function(){
+					if(typeof(options.callback_end)==='function'){
+						options.callback_end(slideNo,s.total);
+					};
+				},time);
 			},
 			
 			//REMOVE SLIDER
