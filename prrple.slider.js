@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.17
-	UPDATED:	2015-06-30
+	VERSION:	1.18
+	UPDATED:	2015-07-02
 
 */
 
@@ -35,6 +35,7 @@
 		easing: 			'easeInOutQuart',	//requires jquery easing plugin
 		loop:				false,				//whether or not to infinitely loop the slider
 		loopSeamless:		true,				//whether or not a looping slider should seamlessly rotate
+		csstransforms:		true,				//use css transforms?
 		//AUTOPLAY
 		autoPlay:			false,				//play slider automatically?
 		autoPlayInterval:	4000,				//how often to automatically switch between slides
@@ -137,7 +138,7 @@
 			//INITIALISE
 			init: function(){
 				//TRANSFORMS
-				s.transforms = (typeof(Modernizr)!=='undefined'?Modernizr.csstransforms:false);
+				s.transforms = (options.csstransforms!=true?false:(typeof(Modernizr)!=='undefined'?Modernizr.csstransforms:false));
 				//GET DIVS
 				s.get_divs();
 				//GET INFO
@@ -460,8 +461,9 @@
 							var d = 0;
 						};
 						if(s.transforms){
-							s.div.slides.stop().css({
-								top: (s.left_current+d)
+							s.div.slides.stop().removeClass('animate').css({
+								'-webkit-transform': 'translateY('+(s.left_current+d)+'px)',
+								'transform': 'translateY('+(s.left_current+d)+'px)'
 							});
 						}else{
 							s.div.slides.stop().css({
@@ -481,8 +483,9 @@
 							var d = 0;
 						};
 						if(s.transforms){
-							s.div.slides.stop().css({
-								left: (s.left_current+d)
+							s.div.slides.stop().removeClass('animate').css({
+								'-webkit-transform': 'translateX('+(s.left_current+d)+'px)',
+								'transform': 'translateX('+(s.left_current+d)+'px)'
 							});
 						}else{
 							s.div.slides.stop().css({
@@ -520,9 +523,10 @@
 					//cancel
 					if(orientation=='vertical'){
 						if(s.transforms){
-							s.div.slides.stop().animate({
-								top: s.left_current
-							},options.transitionTime,options.easing);
+							s.div.slides.stop().addClass('animate').css({
+								'-webkit-transform': 'translateY('+s.left_current+'px)',
+								'transform': 'translateY('+s.left_current+'px)'
+							});
 						}else{
 							s.div.slides.stop().animate({
 								top: s.left_current
@@ -530,9 +534,10 @@
 						};
 					}else{
 						if(s.transforms){
-							s.div.slides.stop().animate({
-								left: s.left_current
-							},options.transitionTime,options.easing);
+							s.div.slides.stop().addClass('animate').css({
+								'-webkit-transform': 'translateX('+s.left_current+'px)',
+								'transform': 'translateX('+s.left_current+'px)'
+							});
 						}else{
 							s.div.slides.stop().animate({
 								left: s.left_current
@@ -603,9 +608,10 @@
 							//seamless slide right
 							var dist = '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(s.transforms){
-								s.div.slides.stop(true).animate({
-									top:dist
-								},time,options.easing);
+								s.div.slides.stop(true).addClass('animate').css({
+									'-webkit-transform': 'translateY('+dist+')',
+									'transform': 'translateY('+dist+')'
+								});
 							}else{
 								s.div.slides.stop(true).animate({
 									top:dist
@@ -615,11 +621,14 @@
 							//seamless slide left
 							var dist = '-'+(((slideNo-1) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(s.transforms){
-								s.div.slides.stop(true).css({
-									top: '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px'
-								}).animate({
-									top:dist
-								},time,options.easing);
+								s.div.slides.stop(true).removeClass('animate').css({
+									'-webkit-transform': 'translateY(-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px)',
+									'transform': 'translateY(-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px)'
+								});
+								s.div.slides.stop(true).addClass('animate').css({
+									'-webkit-transform': 'translateY('+dist+')',
+									'transform': 'translateY('+dist+')'
+								});
 							}else{
 								s.div.slides.stop(true).css({
 									top: '-'+(((s.total) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px'
@@ -631,9 +640,11 @@
 							//general slide
 							var dist = '-'+(((slideNo-1) * s.height) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(swiping!=true && direction=='right' && prev==1){
+								//if seamless
 								if(s.transforms){
-									s.div.slides.stop(true).css({
-										top: 0
+									s.div.slides.stop(true).removeClass('animate').css({
+										'-webkit-transform': 'translateY(0px)',
+										'transform': 'translateY(0px)'
 									});
 								}else{
 									s.div.slides.stop(true).css({
@@ -642,9 +653,10 @@
 								};
 							};
 							if(s.transforms){
-								s.div.slides.stop(true).animate({
-									top:dist
-								},time,options.easing);
+								s.div.slides.stop(true).addClass('animate').css({
+									'-webkit-transform': 'translateY('+dist+')',
+									'transform': 'translateY('+dist+')'
+								});
 							}else{
 								s.div.slides.stop(true).animate({
 									top:dist
@@ -657,9 +669,10 @@
 							//seamless slide right
 							var dist = '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(s.transforms){
-								s.div.slides.stop(true).animate({
-									left:dist
-								},time,options.easing);
+								s.div.slides.stop(true).addClass('animate').css({
+									'-webkit-transform': 'translateX('+dist+')',
+									'transform': 'translateX('+dist+')'
+								});
 							}else{
 								s.div.slides.stop(true).animate({
 									left:dist
@@ -669,11 +682,14 @@
 							//seamless slide left
 							var dist = '-'+(((slideNo-1) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(s.transforms){
-								s.div.slides.stop(true).css({
-									left: '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px'
-								}).animate({
-									left:dist
-								},time,options.easing);
+								s.div.slides.stop(true).removeClass('animate').css({
+									'-webkit-transform': 'translateX(-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px)',
+									'transform': 'translateX(-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px)'
+								});
+								s.div.slides.stop(true).addClass('animate').css({
+									'-webkit-transform': 'translateX('+dist+')',
+									'transform': 'translateX('+dist+')'
+								});
 							}else{
 								s.div.slides.stop(true).css({
 									left: '-'+(((s.total) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px'
@@ -685,9 +701,11 @@
 							//general slide
 							var dist = '-'+(((slideNo-1) * s.width) + (parseInt(options.spacing) * (slideNo-1)))+'px';
 							if(swiping!=true && direction=='right' && prev==1){
+								//if seamless
 								if(s.transforms){
-									s.div.slides.stop(true).css({
-										left: 0
+									s.div.slides.stop(true).removeClass('animate').css({
+										'-webkit-transform': 'translateX(0px)',
+										'transform': 'translateX(0px)'
 									});
 								}else{
 									s.div.slides.stop(true).css({
@@ -696,9 +714,10 @@
 								};
 							};
 							if(s.transforms){
-								s.div.slides.stop(true).animate({
-									left:dist
-								},time,options.easing);
+								s.div.slides.stop(true).addClass('animate').css({
+									'-webkit-transform': 'translateX('+dist+')',
+									'transform': 'translateX('+dist+')'
+								});
 							}else{
 								s.div.slides.stop(true).animate({
 									left:dist
