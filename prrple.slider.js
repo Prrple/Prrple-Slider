@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.18
-	UPDATED:	2015-07-02
+	VERSION:	1.19
+	UPDATED:	2015-12-04
 
 */
 
@@ -24,6 +24,17 @@
 	
 	/******************** CONFIG ********************/
 	$.prrpleSliderConfig = $.prrpleSliderConfig || {
+		//ELEMENTS
+		el_slider_area:		'.slider_area',		//define slider area element
+		el_slides:			'.slides',			//define slides element
+		el_slide:			'.slide',			//define slide elements
+		el_left:			'.slide_left',		//define left arrow element
+		el_right:			'.slide_right',		//define right arrow element
+		el_controls:		'.slider_controls',	//define arrow wrapper
+		el_play:			'.slider_play',		//define play button
+		el_pause:			'.slider_pause',	//define pause button
+		el_nav:				'.slider_nav',		//define nav dot wrapper
+		el_navdot:			'.slider_navdot',	//define nav dots
 		//SIZING
 		width:				null,				//define specific width
 		height:				null,				//define specific height
@@ -165,7 +176,7 @@
 				if(options.firstSlide!=1){
 					s.goTo(options.firstSlide,true);
 				}else{
-					s.slider.find('.slide:nth-child(1)').addClass('current');
+					s.slider.find(options.el_slide+':nth-child(1)').addClass('current');
 				};
 				//CALLBACK
 				if(typeof(options.callback)==='function'){
@@ -182,20 +193,20 @@
 			
 			//GET DIVS
 			get_divs: function(){
-				s.div.slider_area = s.slider.find('.slider_area');
-				s.div.slides = s.slider.find('.slides');
-				s.div.slide = s.slider.find('.slide');
-				s.div.nav = s.slider.find('.slider_nav');
-				s.div.left = s.slider.find('.slide_left');
-				s.div.right = s.slider.find('.slide_right');
-				s.div.controls = s.slider.find('.slider_controls');
-				s.div.play = s.slider.find('.slider_play');
-				s.div.pause = s.slider.find('.slider_pause');
+				s.div.slider_area = s.slider.find(options.el_slider_area);
+				s.div.slides = s.slider.find(options.el_slides);
+				s.div.slide = s.slider.find(options.el_slide);
+				s.div.nav = s.slider.find(options.el_nav);
+				s.div.left = s.slider.find(options.el_left);
+				s.div.right = s.slider.find(options.el_right);
+				s.div.controls = s.slider.find(options.el_controls);
+				s.div.play = s.slider.find(options.el_play);
+				s.div.pause = s.slider.find(options.el_pause);
 			},
 			
 			//GET INFO
 			get_info: function(){
-				s.total = s.slider.find('.slide').length;
+				s.total = s.slider.find(options.el_slide).length;
 			},
 			
 			//UPDATE CLASS
@@ -221,7 +232,7 @@
 				s.div.slider_area.removeAttr('style');
 				s.div.slides.removeAttr('style');
 				s.div.slide.removeAttr('style');
-				s.slider.find('.slide').show();
+				s.slider.find(options.el_slide).show();
 				//get width
 				if(options.width==null){
 					s.width = s.div.slider_area.innerWidth();
@@ -232,20 +243,21 @@
 				if(options.height==null){
 					if(options.transition == 'fade'){
 						s.height = 0;
-						s.slider.find('.slide').each(function(){
+						s.slider.find(options.el_slide).each(function(){
 							var h2 = $(this).height();
 							if(h2 > s.height){
 								s.height = h2;
 							};
 						});
 					}else{
-						s.slider.find('.slide').css({
+						s.slider.find(options.el_slide).css({
 							width: s.width
 						});
 						s.div.slides.css({
 							width: (s.width * (s.total+1))
 						});
 						s.height = s.div.slider_area.innerHeight();
+						return false;
 					};
 					var h3 = s.slider.height();
 					if(h3 > s.height){
@@ -255,7 +267,7 @@
 					s.height = options.height;
 				};
 				s.div.slides.removeAttr('style');
-				s.slider.find('.slide').removeAttr('style').show();
+				s.slider.find(options.el_slide).removeAttr('style').show();
 			},
 			
 			//UPDATE SIZE
@@ -315,17 +327,17 @@
 			//UPDATE VISIBILITY
 			update_visibility: function(){
 				if(options.transition == 'fade'){
-					s.slider.find('.slide').hide();
-					s.slider.find('.slide:first').show();
+					s.slider.find(options.el_slide).hide();
+					s.slider.find(options.el_slide+':first').show();
 				};
 			},
 			
 			//DUPLICATE SLIDE
 			add_duplicate: function(){
-				if(options.loop==true && options.loopSeamless==true && s.slider.find('.slide.cloned').length<1){
-					s.slider.find('.slide:first-child').clone().appendTo(s.div.slides);
-					s.slider.find('.slide:last-child').addClass('cloned');
-					s.div.slide = s.slider.find('.slide');
+				if(options.loop==true && options.loopSeamless==true && s.slider.find(options.el_slide+'.cloned').length<1){
+					s.slider.find(options.el_slide+':first-child').clone().appendTo(s.div.slides);
+					s.slider.find(options.el_slide+':last-child').addClass('cloned');
+					s.div.slide = s.slider.find(options.el_slide);
 				};
 			},
 			
@@ -338,7 +350,7 @@
 					for(i=1; i<(s.total+1); i++){
 						s.div.nav.append('<a class="slider_navdot '+(i==1?'current':'')+'" id="slider_navdot_'+i+'" >'+i+'</a>');
 					};
-					s.div.nav.find('.slider_navdot').each(function(){
+					s.div.nav.find(options.el_navdot).each(function(){
 						$(this).unbind( "click" );
 						$(this).click(function(){
 							var slideNo = parseInt($(this).attr('id').replace('slider_navdot_',''));
@@ -593,13 +605,13 @@
 					};
 				};
 				//update nav
-				s.div.nav.find('.slider_navdot').removeClass('current');
+				s.div.nav.find(options.el_navdot).removeClass('current');
 				s.div.nav.find('#slider_navdot_'+slideNo).addClass('current');
 				//animate slider
 				if(options.transition == 'fade'){
 					//fade
-					s.slider.find('.slide').fadeOut(time);
-					s.slider.find('.slide:nth-child('+(slideNo)+')').fadeIn(time);
+					s.slider.find(options.el_slide).fadeOut(time);
+					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
 				}else if(options.transition == 'slide'){
 					//slide
 					if(options.direction == 'vertical'){
@@ -727,15 +739,15 @@
 					};
 				};
 				//class
-				s.slider.find('.slide').removeClass('current prev next');
-				s.slider.find('.slide:nth-child('+(s.current)+')').addClass('current');
-				s.slider.find('.slide:nth-child('+(s.prev)+')').addClass('prev');
-				s.slider.find('.slide:nth-child('+(s.next)+')').addClass('next');
+				s.slider.find(options.el_slide).removeClass('current prev next');
+				s.slider.find(options.el_slide+':nth-child('+(s.current)+')').addClass('current');
+				s.slider.find(options.el_slide+':nth-child('+(s.prev)+')').addClass('prev');
+				s.slider.find(options.el_slide+':nth-child('+(s.next)+')').addClass('next');
 				setTimeout(function(){
-					s.slider.find('.slide').removeClass('current2 prev2 next2');
-					s.slider.find('.slide:nth-child('+(s.current)+')').addClass('current2');
-					s.slider.find('.slide:nth-child('+(s.prev)+')').addClass('prev2');
-					s.slider.find('.slide:nth-child('+(s.next)+')').addClass('next2');
+					s.slider.find(options.el_slide).removeClass('current2 prev2 next2');
+					s.slider.find(options.el_slide+':nth-child('+(s.current)+')').addClass('current2');
+					s.slider.find(options.el_slide+':nth-child('+(s.prev)+')').addClass('prev2');
+					s.slider.find(options.el_slide+':nth-child('+(s.next)+')').addClass('next2');
 				},time);
 				//interval
 				s.autoplay();
@@ -778,7 +790,7 @@
 				//CLEAR INTERVAL
 				clearInterval(s.autoplay_int);
 				//REMOVE CLONE
-				s.slider.find('.slide.cloned').remove();
+				s.slider.find(options.el_slide+'.cloned').remove();
 				//REMOVE CSS
 				s.slider.find('*').removeAttr('style');
 				s.slider.removeClass('slider_init fade slide');
