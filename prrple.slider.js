@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.19
-	UPDATED:	2015-12-04
+	VERSION:	1.20
+	UPDATED:	2015-12-07
 
 */
 
@@ -335,8 +335,8 @@
 			//DUPLICATE SLIDE
 			add_duplicate: function(){
 				if(options.loop==true && options.loopSeamless==true && s.slider.find(options.el_slide+'.cloned').length<1){
-					s.slider.find(options.el_slide+':first-child').clone().appendTo(s.div.slides);
-					s.slider.find(options.el_slide+':last-child').addClass('cloned');
+					s.slider.find(options.el_slide).first().clone().appendTo(s.div.slides);
+					s.slider.find(options.el_slide).last().addClass('cloned');
 					s.div.slide = s.slider.find(options.el_slide);
 				};
 			},
