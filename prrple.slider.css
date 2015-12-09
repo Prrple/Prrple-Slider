@@ -16,4 +16,4 @@
 .slider .slider_navdot.current{ background:#AAA; }
 .slider .slider_controls{ display:none; }
 .slider .slider_play.hidden,.slider .slider_pause.hidden{ display:none !important; }
-.slider .animate{ -webkit-transition:all 300ms ease-in-out; -moz-transition:all 300ms ease-in-out; -o-transition:all 300ms ease-in-out; transition:all 300ms ease-in-out; }
+.slider .animate{ -webkit-transition:all 500ms ease-in-out; -moz-transition:all 500ms ease-in-out; -o-transition:all 500ms ease-in-out; transition:all 500ms ease-in-out; }

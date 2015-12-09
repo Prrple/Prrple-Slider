@@ -42,7 +42,7 @@
 		//ANIMATION
 		direction:			'horizontal',		//horizontal, vertical
 		transition:			'fade',				//fade, slide
-		transitionTime:		600,				//how long to change slides
+		transitionTime:		500,				//how long to change slides
 		easing: 			'swing',			//requires jquery easing plugin
 		loop:				false,				//whether or not to infinitely loop the slider
 		loopSeamless:		true,				//whether or not a looping slider should seamlessly rotate
