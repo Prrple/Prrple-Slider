@@ -95,15 +95,31 @@ $(document).ready(function(){
 	$('#slider6 .slider').prrpleSlider({
 		transition: 			'slide',
 		loop:					true,
+		loopSeamless:			true
+	});
+	$('#slider6 .slider').swipe({
+		swipeStatus: function swipeStatus(event,phase,direction,distance){
+			$('#slider6 .slider').prrpleSliderSwipe(event,phase,direction,distance,'horizontal')
+		},
+		threshold:100,
+		allowPageScroll:'vertical',
+		excludedElements: ''
+	});
+	
+	
+	/********** SLIDER 7 - SLIDE - LOOP - SEAMLESS **********/
+	$('#slider7 .slider').prrpleSlider({
+		transition: 			'slide',
+		loop:					true,
 		loopSeamless:			true,
 		csstransforms:			true
 	});
-	$('#slider6 .slider').swipe({
+	$('#slider7 .slider').swipe({
 		swipeLeft:function(){
-			$('#slider6 .slider').prrpleSliderRight();
+			$('#slider7 .slider').prrpleSliderRight();
 		},
 		swipeRight:function(){
-			$('#slider6 .slider').prrpleSliderLeft();
+			$('#slider7 .slider').prrpleSliderLeft();
 		},
 		threshold:100,
 		allowPageScroll:'vertical',
