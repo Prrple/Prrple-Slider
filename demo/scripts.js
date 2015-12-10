@@ -5,7 +5,9 @@ $(document).ready(function(){
 	
 	
 	/********** SLIDER 1 - FADE **********/
-	$('#slider1 .slider').prrpleSlider();
+	$('#slider1 .slider').prrpleSlider({
+		windowsize:				true
+	});
 	$('#slider1 .slider').swipe({
 		swipeLeft:function(){
 			$('#slider1 .slider').prrpleSliderRight();
@@ -21,6 +23,7 @@ $(document).ready(function(){
 	
 	/********** SLIDER 2 - FADE - LOOP **********/
 	$('#slider2 .slider').prrpleSlider({
+		windowsize:				true,
 		loop:					true,
 	});
 	$('#slider2 .slider').swipe({
@@ -38,6 +41,7 @@ $(document).ready(function(){
 	
 	/********** SLIDER 3 - SLIDE **********/
 	$('#slider3 .slider').prrpleSlider({
+		windowsize:				true,
 		transition: 			'slide'
 	});
 	$('#slider3 .slider').swipe({
@@ -55,6 +59,7 @@ $(document).ready(function(){
 	
 	/********** SLIDER 4 - SLIDE - LOOP **********/
 	$('#slider4 .slider').prrpleSlider({
+		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			false
@@ -74,6 +79,7 @@ $(document).ready(function(){
 	
 	/********** SLIDER 5 - SLIDE - LOOP - SEAMLESS **********/
 	$('#slider5 .slider').prrpleSlider({
+		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			true
@@ -91,8 +97,9 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 6 - SLIDE - LOOP - SEAMLESS **********/
+	/********** SLIDER 6 - SLIDE - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider6 .slider').prrpleSlider({
+		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			true
@@ -107,56 +114,22 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 7 - SLIDE - LOOP - SEAMLESS **********/
+	/********** SLIDER 7 - SLIDE - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider7 .slider').prrpleSlider({
+		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			true,
 		csstransforms:			true
 	});
 	$('#slider7 .slider').swipe({
-		swipeLeft:function(){
-			$('#slider7 .slider').prrpleSliderRight();
-		},
-		swipeRight:function(){
-			$('#slider7 .slider').prrpleSliderLeft();
+		swipeStatus: function swipeStatus(event,phase,direction,distance){
+			$('#slider7 .slider').prrpleSliderSwipe(event,phase,direction,distance,'horizontal')
 		},
 		threshold:100,
 		allowPageScroll:'vertical',
 		excludedElements: ''
 	});
-	
-	
-	
-	
-	
-	/*
-	$('#slider1 .slider').prrpleSlider({
-		transition: 			'slide',
-		transitionTime:			400,
-		direction:				'horizontal',
-		loop:					false,
-		loopSeamless:			false,
-		csstransforms:			false
-	});
-	*/
-	
-	/*
-	$('#slider1 .slider').swipe({
-		swipeStatus: function swipeStatus(event,phase,direction,distance){
-			$('#slider1 .slider').prrpleSliderSwipe(event,phase,direction,distance,'horizontal')
-		},
-		/*swipeLeft:function(){
-			$('#slider1 .slider').prrpleSliderRight();
-		},
-		swipeRight:function(){
-			$('#slider1 .slider').prrpleSliderLeft();
-		},*/
-		/*threshold:100,
-		allowPageScroll:'vertical',
-		excludedElements: ''
-	});
-	*/
 	
 	
 });
@@ -171,3 +144,6 @@ $(window).resize(function(){
 		});
 	},100);
 });
+
+
+

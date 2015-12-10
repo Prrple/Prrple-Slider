@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.21
-	UPDATED:	2015-12-09
+	VERSION:	1.22
+	UPDATED:	2015-12-10
 
 */
 
@@ -52,6 +52,7 @@
 		autoPlayInterval:	4000,				//how often to automatically switch between slides
 		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
+		windowsize:			false,				//resize slider on browser resize
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		firstSlide:			1,					//the slide number to start on
 		callback:			null,				//callback function after a slide changes
@@ -322,7 +323,7 @@
 						});
 					}else{
 						if(s.cloned==true){
-							var w = s.width * (s.total + 1);
+							var w = s.width * (s.total + 2);
 						}else{
 							var w = s.width * s.total;
 						};
@@ -463,24 +464,42 @@
 			
 			//GET POSITION - SPECIFIED SLIDE
 			get_pos: function(slide,direction){
-				var prev = slide-1;
 				var l = (direction=='vertical'?s.height:s.width);
-				return '-'+((prev * l) + (parseInt(options.spacing) * prev))+'px';
+				//var total = (s.cloned==true?slide:slide-1);
+				var total = slide-1;
+				return '-'+((total * l) + (parseInt(options.spacing) * total))+'px';
 			},
 			
+			//GET POSITION - FIRST SLIDE
 			get_pos_first: function(direction){
-				return '0px';
+				if(s.cloned==true){
+					//return s.width + (parseInt(options.spacing));
+					return '0px';
+				}else{
+					return '0px';
+				};
 			},
 			
+			//GET POSITION - LAST SLIDE
 			get_pos_last: function(direction){
 				var l = (direction=='vertical'?s.height:s.width);
-				return parseInt('-'+(((s.total-1) * l) + (parseInt(options.spacing) * (s.total-1))));
+				//var total = (s.cloned==true?s.total:s.total-1);
+				var total = s.total-1;
+				return parseInt('-'+((total * l) + (parseInt(options.spacing) * total)));
 			},
 			
 			//GET POSITION - CLONED FIRST SLIDE (AT END)
 			get_pos_clone_first: function(direction){
 				var l = (direction=='vertical'?s.height:s.width);
-				return '-'+(((s.total) * l) + (parseInt(options.spacing) * (s.total-1)))+'px';
+				//var total = (s.cloned==true?s.total:s.total-1);
+				var total = s.total-1;
+				var total2 = total+1;
+				return '-'+((total2 * l) + (parseInt(options.spacing) * total))+'px';
+			},
+			
+			//GET POSITION - CLONED LAST SLIDE (AT START)
+			get_pos_clone_last: function(direction){
+				return '0px';
 			},
 			
 			
@@ -738,12 +757,11 @@
 						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
 							//seamless slide left (swiping)
 							var dist = (s.width + (parseInt(options.spacing) * xprev))+'px';
-							console.log(dist);
 						}else{
 							//general slide
 							var dist = s.get_pos(slideNo);
 							if(swiping!=true && direction=='right' && prev==1){
-								var dist_reset = s.get_pos_first();
+								var dist_reset = s.get_pos_first;
 							};
 						};
 						//horizontal - reset
