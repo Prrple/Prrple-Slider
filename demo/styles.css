@@ -40,7 +40,7 @@ body{
 
 /********** FONTS **********/
 h1{
-	font-size:28px;
+	font-size:26px;
 	line-height:33px;
 	margin:0 0 22px;
 	font-weight:lighter;
@@ -371,6 +371,31 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 	right:10px;
 }
 
+
+
+.slider.vertical .slide_left,
+.slider.vertical .slide_right{
+	width:100px;
+	left:50%;
+	top:10px;
+	margin:0 -60px;
+	text-align:center;
+}
+.slider.vertical .slide_right{
+	top:auto;
+	bottom:10px;
+}
+.slider.vertical .slider_nav{
+	width:6px;
+	height:56px;
+	top:97px;
+	left:auto;
+	bottom:auto;
+	right:10px;
+}
+.slider.vertical .slider_navdot{
+	margin:4px 0;
+}
 
 
 

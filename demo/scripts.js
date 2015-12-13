@@ -39,7 +39,7 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 3 - SLIDE **********/
+	/********** SLIDER 3 - SLIDE - HORIZONTAL **********/
 	$('#slider3 .slider').prrpleSlider({
 		windowsize:				true,
 		transition: 			'slide'
@@ -57,7 +57,7 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 4 - SLIDE - LOOP **********/
+	/********** SLIDER 4 - SLIDE - HORIZONTAL - LOOP **********/
 	$('#slider4 .slider').prrpleSlider({
 		windowsize:				true,
 		transition: 			'slide',
@@ -77,7 +77,7 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 5 - SLIDE - LOOP - SEAMLESS **********/
+	/********** SLIDER 5 - SLIDE - HORIZONTAL - LOOP - SEAMLESS **********/
 	$('#slider5 .slider').prrpleSlider({
 		windowsize:				true,
 		transition: 			'slide',
@@ -97,7 +97,7 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 6 - SLIDE - LOOP - SEAMLESS - RICH SWIPING **********/
+	/********** SLIDER 6 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider6 .slider').prrpleSlider({
 		windowsize:				true,
 		transition: 			'slide',
@@ -114,7 +114,7 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 7 - SLIDE - LOOP - SEAMLESS - RICH SWIPING **********/
+	/********** SLIDER 7 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider7 .slider').prrpleSlider({
 		windowsize:				true,
 		transition: 			'slide',
@@ -125,6 +125,104 @@ $(document).ready(function(){
 	$('#slider7 .slider').swipe({
 		swipeStatus: function swipeStatus(event,phase,direction,distance){
 			$('#slider7 .slider').prrpleSliderSwipe(event,phase,direction,distance,'horizontal')
+		},
+		threshold:100,
+		allowPageScroll:'vertical',
+		excludedElements: ''
+	});
+	
+	
+	/********** SLIDER 8 - SLIDE - VERTICAL **********/
+	$('#slider8 .slider').prrpleSlider({
+		windowsize:				true,
+		direction:				'vertical',
+		transition: 			'slide'
+	});
+	$('#slider8 .slider').swipe({
+		swipeUp:function(){
+			$('#slider8 .slider').prrpleSliderRight();
+		},
+		swipeDown:function(){
+			$('#slider8 .slider').prrpleSliderLeft();
+		},
+		threshold:100,
+		allowPageScroll:'vertical',
+		excludedElements: ''
+	});
+	
+	
+	/********** SLIDER 9 - SLIDE - VERTICAL - LOOP **********/
+	$('#slider9 .slider').prrpleSlider({
+		windowsize:				true,
+		direction:				'vertical',
+		transition: 			'slide',
+		loop:					true,
+		loopSeamless:			false
+	});
+	$('#slider9 .slider').swipe({
+		swipeUp:function(){
+			$('#slider9 .slider').prrpleSliderRight();
+		},
+		swipeDown:function(){
+			$('#slider9 .slider').prrpleSliderLeft();
+		},
+		threshold:100,
+		allowPageScroll:'vertical',
+		excludedElements: ''
+	});
+	
+	
+	/********** SLIDER 10 - SLIDE - VERTICAL - LOOP - SEAMLESS **********/
+	$('#slider10 .slider').prrpleSlider({
+		windowsize:				true,
+		direction:				'vertical',
+		transition: 			'slide',
+		loop:					true,
+		loopSeamless:			true
+	});
+	$('#slider10 .slider').swipe({
+		swipeUp:function(){
+			$('#slider10 .slider').prrpleSliderRight();
+		},
+		swipeDown:function(){
+			$('#slider10 .slider').prrpleSliderLeft();
+		},
+		threshold:100,
+		allowPageScroll:'vertical',
+		excludedElements: ''
+	});
+	
+	
+	/********** SLIDER 11 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING **********/
+	$('#slider11 .slider').prrpleSlider({
+		windowsize:				true,
+		direction:				'vertical',
+		transition: 			'slide',
+		loop:					true,
+		loopSeamless:			true
+	});
+	$('#slider11 .slider').swipe({
+		swipeStatus: function swipeStatus(event,phase,direction,distance){
+			$('#slider11 .slider').prrpleSliderSwipe(event,phase,direction,distance,'vertical')
+		},
+		threshold:100,
+		allowPageScroll:'vertical',
+		excludedElements: ''
+	});
+	
+	
+	/********** SLIDER 12 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING **********/
+	$('#slider12 .slider').prrpleSlider({
+		windowsize:				true,
+		direction:				'vertical',
+		transition: 			'slide',
+		loop:					true,
+		loopSeamless:			true,
+		csstransforms:			true
+	});
+	$('#slider12 .slider').swipe({
+		swipeStatus: function swipeStatus(event,phase,direction,distance){
+			$('#slider12 .slider').prrpleSliderSwipe(event,phase,direction,distance,'vertical')
 		},
 		threshold:100,
 		allowPageScroll:'vertical',

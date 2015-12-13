@@ -7,7 +7,7 @@
 .slider .slides{ display:block; position:relative; }
 .slider .slide{ display:block; position:relative; float:left; }
 .slider.fade .slide{ display:block; position:absolute; top:0; left:0; width:100%; }
-.slider.vertical .slide{ float:none; }
+/*.slider.vertical .slide{ float:none; }*/
 .slider .slide_clear{ display:block; position:relative; height:0; clear:both; }
 .slider .slide_left, .slider .slide_right{ display:none; color:#333; cursor:pointer; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
 .slider .slide_left:hover, .slider .slide_right:hover{ color:#888; }
