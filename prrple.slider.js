@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.22
-	UPDATED:	2015-12-10
+	VERSION:	1.23
+	UPDATED:	2016-02-29
 
 */
 
@@ -203,7 +203,7 @@
 			},
 			
 			
-			//GET DIVS
+			//GET ELEMENTS
 			get_elements: function(){
 				s.el.slider_area = s.slider.find(options.el_slider_area);
 				s.el.slides = s.slider.find(options.el_slides);
@@ -508,7 +508,7 @@
 				if(s.total>1 && !s.el.left.hasClass('slide_left_inactive')){
 					//go to next slide
 					if(s.current > 1){
-						s.goTo(s.current-1,false,'left',swiping)
+						s.goTo(s.current-1,false,'left',swiping);
 					}else{
 						if(options.loop == true){
 							s.goTo(s.total,false,'left',swiping);
@@ -527,10 +527,10 @@
 				if(s.total>1 && !s.el.right.hasClass('slide_right_inactive')){
 					//go to next slide
 					if(s.current < s.total){
-						s.goTo(s.current+1,false,'right',swiping)
+						s.goTo(s.current+1,false,'right',swiping);
 					}else{
 						if(options.loop == true){
-							s.goTo(1,false,'right',swiping)
+							s.goTo(1,false,'right',swiping);
 						};
 					};
 					//pause autoplay
@@ -544,93 +544,95 @@
 			//SWIPE
 			swipe: function(event, phase, direction, distance, orientation, callback){
 				//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
-				if(phase=='start'){
-					//reset position (for seamless swipes)
-					if(s.cloned==true && s.current==1){
-						//first
-						var dist = s.get_pos_first();
-					}else if(s.cloned==true && s.current==s.total){
-						//last
-						var dist = s.get_pos_last();
-					};
-					if(typeof(dist)!=='undefined'){
-						s.pos_current = parseInt(dist);
-						if(s.transforms){
-							s.el.slides.stop().removeClass('animate').css({
-								'-webkit-transform': 'translateX('+dist+')',
-								'transform': 'translateX('+dist+')'
-							});
-						}else{
-							s.el.slides.stop().css({
-								left:dist
-							});
+				if(s.total>1){
+					if(phase=='start'){
+						//reset position (for seamless swipes)
+						if(s.cloned==true && s.current==1){
+							//first
+							var dist = s.get_pos_first();
+						}else if(s.cloned==true && s.current==s.total){
+							//last
+							var dist = s.get_pos_last();
 						};
-					};
-					//callback
-					if(typeof(callback) == "function"){
-						callback(s.current,s.total,phase,direction,distance);
-					};
-				}else if(phase=='move'){
-					//get distance
-					if((orientation=='vertical' && direction=='up') || (orientation!='vertical' && direction=='left')){
-						var d = -distance;
-					}else if((orientation=='vertical' && direction=='down') || (orientation!='vertical' && direction=='right')){
-						var d = distance;
-					}else{
-						var d = 0;
-					};
-					var dist = (s.pos_current+d)+'px';
-					//set position
-					if(orientation=='vertical'){
-						if(s.transforms){
-							s.el.slides.stop().removeClass('animate').css({
-								'-webkit-transform': 'translateY('+dist+')',
-								'transform': 'translateY('+dist+')'
-							});
-						}else{
-							s.el.slides.stop().css({
-								top: dist
-							});
+						if(typeof(dist)!=='undefined'){
+							s.pos_current = parseInt(dist);
+							if(s.transforms){
+								s.el.slides.stop().removeClass('animate').css({
+									'-webkit-transform': 'translateX('+dist+')',
+									'transform': 'translateX('+dist+')'
+								});
+							}else{
+								s.el.slides.stop().css({
+									left:dist
+								});
+							};
 						};
-					}else{
-						if(s.transforms){
-							s.el.slides.stop().removeClass('animate').css({
-								'-webkit-transform': 'translateX('+dist+')',
-								'transform': 'translateX('+dist+')'
-							});
-						}else{
-							s.el.slides.stop().css({
-								left: dist
-							});
-						};
-					};
-					//callback
-					if(typeof(callback) == "function"){
-						callback(s.current,s.total,phase,direction,distance,dist);
-					};
-				}else if(phase=='end'){
-					//go to slide
-					if(orientation=='vertical' && direction=="down" && s.current>1){
-						s.slide_left(true,true);
-					}else if(orientation=='vertical' && direction=="up" && s.current<s.total){
-						s.slide_right(true,true);
-					}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
-						s.slide_left(true,true);
-					}else if(orientation!='vertical' && direction=="left" && (s.current<s.total || s.cloned==true)){
-						s.slide_right(true,true);
-					}else{
-						var c = false;
-						cancel();
-					};
-					//callback
-					if(c!=false){
+						//callback
 						if(typeof(callback) == "function"){
 							callback(s.current,s.total,phase,direction,distance);
 						};
+					}else if(phase=='move'){
+						//get distance
+						if((orientation=='vertical' && direction=='up') || (orientation!='vertical' && direction=='left')){
+							var d = -distance;
+						}else if((orientation=='vertical' && direction=='down') || (orientation!='vertical' && direction=='right')){
+							var d = distance;
+						}else{
+							var d = 0;
+						};
+						var dist = (s.pos_current+d)+'px';
+						//set position
+						if(orientation=='vertical'){
+							if(s.transforms){
+								s.el.slides.stop().removeClass('animate').css({
+									'-webkit-transform': 'translateY('+dist+')',
+									'transform': 'translateY('+dist+')'
+								});
+							}else{
+								s.el.slides.stop().css({
+									top: dist
+								});
+							};
+						}else{
+							if(s.transforms){
+								s.el.slides.stop().removeClass('animate').css({
+									'-webkit-transform': 'translateX('+dist+')',
+									'transform': 'translateX('+dist+')'
+								});
+							}else{
+								s.el.slides.stop().css({
+									left: dist
+								});
+							};
+						};
+						//callback
+						if(typeof(callback) == "function"){
+							callback(s.current,s.total,phase,direction,distance,dist);
+						};
+					}else if(phase=='end'){
+						//go to slide
+						if(orientation=='vertical' && direction=="down" && s.current>1){
+							s.slide_left(true,true);
+						}else if(orientation=='vertical' && direction=="up" && s.current<s.total){
+							s.slide_right(true,true);
+						}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
+							s.slide_left(true,true);
+						}else if(orientation!='vertical' && direction=="left" && (s.current<s.total || s.cloned==true)){
+							s.slide_right(true,true);
+						}else{
+							var c = false;
+							cancel();
+						};
+						//callback
+						if(c!=false){
+							if(typeof(callback) == "function"){
+								callback(s.current,s.total,phase,direction,distance);
+							};
+						};
+					}else{
+						//cancel
+						cancel();
 					};
-				}else{
-					//cancel
-					cancel();
 				};
 				function cancel(){
 					//get distance
