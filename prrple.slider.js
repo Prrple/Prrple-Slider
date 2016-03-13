@@ -6,9 +6,9 @@
 	AUTHOR:		Alex Bimpson
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
-	REQUIRES:	jQuery, jQuery TouchSwipe
-	VERSION:	1.23
-	UPDATED:	2016-02-29
+	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
+	VERSION:	1.24
+	UPDATED:	2016-03-13
 
 */
 
@@ -76,6 +76,11 @@
 	
 	
 	/******************** UPDATE SLIDER ********************/
+	$.fn.prrpleSliderUpdate = function(options){
+		try{
+			$(this).data('prrpleSlider').update(options);
+		}catch(e){};
+	};
 	$.fn.prrpleSliderGoTo = function(goTo,skip){
 		try{
 			$(this).data('prrpleSlider').goToSlide(goTo,skip);
@@ -860,6 +865,10 @@
 		
 		
 		//UPDATE FUNCTIONS
+		this.update = function(options2){
+			options = $.extend(options, options, options2);
+			this.resizeSlider();
+		};
 		this.goToSlide = function(goTo,skip){
 			s.goTo(goTo,skip);
 		};
