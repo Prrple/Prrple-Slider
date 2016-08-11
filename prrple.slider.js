@@ -7,7 +7,7 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.1
+	VERSION:	2.2
 	UPDATED:	2016-08-11
 
 */
@@ -677,28 +677,52 @@
 				},
 				//rich swiping
 				rich: function(event, phase, direction, distance, orientation, callback){
-					//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
+					//if(options.debug){console.log('swipe rich');};
+					//if(options.debug){console.log(phase+' - '+direction+' - '+distance+' - '+orientation);};
 					if(s.total>1){
 						if(phase=='start'){
 							//reset position (for seamless swipes)
-							if(s.cloned==true && s.current==1){
-								//first
-								var dist = s.get_pos_first();
-							}else if(s.cloned==true && s.current==s.total){
-								//last
-								var dist = s.get_pos_last();
-							};
-							if(typeof(dist)!=='undefined'){
-								s.pos_current = parseInt(dist);
-								if(s.transforms){
-									s.el.slides.stop().removeClass('animate').css({
-										'-webkit-transform': 'translateX('+dist+')',
-										'transform': 'translateX('+dist+')'
-									});
-								}else{
-									s.el.slides.stop().css({
-										left:dist
-									});
+							if(orientation=='vertical'){
+								if(s.cloned==true && s.current==1){
+									//first
+									var dist = s.get_pos_first('vertical');
+								}else if(s.cloned==true && s.current==s.total){
+									//last
+									var dist = s.get_pos_last('vertical');
+								};
+								if(typeof(dist)!=='undefined'){
+									s.pos_current = parseInt(dist);
+									if(s.transforms){
+										s.el.slides.stop().removeClass('animate').css({
+											'-webkit-transform': 'translateY('+dist+')',
+											'transform': 'translateY('+dist+')'
+										});
+									}else{
+										s.el.slides.stop().css({
+											top:dist
+										});
+									};
+								};
+							}else{
+								if(s.cloned==true && s.current==1){
+									//first
+									var dist = s.get_pos_first();
+								}else if(s.cloned==true && s.current==s.total){
+									//last
+									var dist = s.get_pos_last();
+								};
+								if(typeof(dist)!=='undefined'){
+									s.pos_current = parseInt(dist);
+									if(s.transforms){
+										s.el.slides.stop().removeClass('animate').css({
+											'-webkit-transform': 'translateX('+dist+')',
+											'transform': 'translateX('+dist+')'
+										});
+									}else{
+										s.el.slides.stop().css({
+											left:dist
+										});
+									};
 								};
 							};
 							//callback
