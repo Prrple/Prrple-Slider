@@ -7,7 +7,7 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.2
+	VERSION:	2.3
 	UPDATED:	2016-08-11
 
 */
@@ -25,7 +25,7 @@
 	/******************** CONFIG ********************/
 	$.prrpleSliderConfig = $.prrpleSliderConfig || {
 		//DEBUG
-		debug:				true,				//show console logs?
+		debug:				false,				//show console logs?
 		//ELEMENTS
 		el_slider_area:		'.slider_area',		//define slider area element
 		el_slides:			'.slides',			//define slides element
@@ -769,9 +769,9 @@
 							};
 						}else if(phase=='end'){
 							//go to slide
-							if(orientation=='vertical' && direction=="down" && s.current>1){
+							if(orientation=='vertical' && direction=="down" && (s.current>1 || s.cloned==true)){
 								s.slide_left(true,true);
-							}else if(orientation=='vertical' && direction=="up" && s.current<s.total){
+							}else if(orientation=='vertical' && direction=="up" && (s.current<s.total || s.cloned==true)){
 								s.slide_right(true,true);
 							}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
 								s.slide_left(true,true);
@@ -868,7 +868,7 @@
 				}else if(options.transition == 'slide'){
 					//slide
 					if(options.direction == 'vertical'){
-						console.log('vertical');
+						if(options.debug){console.log('vertical');};
 						//vertical - get position
 						if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
 							//seamless slide right
@@ -909,7 +909,7 @@
 							},time,options.easing);
 						};
 					}else{
-						console.log('horizontal');
+						if(options.debug){console.log('horizontal');};
 						//horizontal - get positions
 						if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
 							//seamless slide right - animate to cloned first slide
