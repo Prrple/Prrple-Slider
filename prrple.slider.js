@@ -376,7 +376,7 @@
 					var first = s.slider.find(options.el_slide).first();
 					var last = s.slider.find(options.el_slide).last();
 					first.clone().addClass('cloned').appendTo(s.el.slides);
-					//last.clone().addClass('cloned cloned2').prependTo(s.el.slides);
+					last.clone().addClass('cloned cloned2').prependTo(s.el.slides);
 					s.el.slide = s.slider.find(options.el_slide);
 				};
 			},
@@ -527,17 +527,18 @@
 			get_pos: function(slide,direction){
 				if(options.debug){console.log('get_pos');};
 				var l = (direction=='vertical'?s.height:s.width);
-				//var total = (s.cloned==true?slide:slide-1);
-				var total = slide-1;
+				var total = (s.cloned==true?slide:slide-1);
+				//var total = slide-1;
 				return '-'+((total * l) + (parseInt(options.spacing) * total))+'px';
 			},
 			
 			//GET POSITION - FIRST SLIDE
 			get_pos_first: function(direction){
 				if(options.debug){console.log('get_pos_first');};
+				var l = (direction=='vertical'?s.height:s.width);
 				if(s.cloned==true){
-					//return s.width + (parseInt(options.spacing));
-					return '0px';
+					return -(l + (parseInt(options.spacing)))+'px';
+					//return '0px';
 				}else{
 					return '0px';
 				};
@@ -547,8 +548,8 @@
 			get_pos_last: function(direction){
 				if(options.debug){console.log('get_pos_last');};
 				var l = (direction=='vertical'?s.height:s.width);
-				//var total = (s.cloned==true?s.total:s.total-1);
-				var total = s.total-1;
+				var total = (s.cloned==true?s.total:s.total-1);
+				//var total = s.total-1;
 				return parseInt('-'+((total * l) + (parseInt(options.spacing) * total)));
 			},
 			
@@ -556,8 +557,8 @@
 			get_pos_clone_first: function(direction){
 				if(options.debug){console.log('get_pos_clone_first');};
 				var l = (direction=='vertical'?s.height:s.width);
-				//var total = (s.cloned==true?s.total:s.total-1);
-				var total = s.total-1;
+				var total = (s.cloned==true?s.total:s.total-1);
+				//var total = s.total-1;
 				var total2 = total+1;
 				return '-'+((total2 * l) + (parseInt(options.spacing) * total))+'px';
 			},
@@ -770,12 +771,16 @@
 						}else if(phase=='end'){
 							//go to slide
 							if(orientation=='vertical' && direction=="down" && (s.current>1 || s.cloned==true)){
+								//vertical down
 								s.slide_left(true,true);
 							}else if(orientation=='vertical' && direction=="up" && (s.current<s.total || s.cloned==true)){
+								//vertical up
 								s.slide_right(true,true);
 							}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
+								//horizontal left
 								s.slide_left(true,true);
 							}else if(orientation!='vertical' && direction=="left" && (s.current<s.total || s.cloned==true)){
+								//horizontal right
 								s.slide_right(true,true);
 							}else{
 								var c = false;
@@ -830,6 +835,7 @@
 			//GO TO SLIDE
 			goTo: function(slideNo,skip,direction,swiping){
 				if(options.debug){console.log('goTo');};
+				console.log(s.current,slideNo);
 				//time
 				if(skip==true){
 					var time = 0;
@@ -871,12 +877,15 @@
 						if(options.debug){console.log('vertical');};
 						//vertical - get position
 						if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
-							//seamless slide right
+							//seamless slide right - animate to cloned first slide
 							var dist = s.get_pos_clone_first('vertical');
-						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right'){
-							//seamless slide left
+						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true){
+							//seamless slide left - reset to cloned first slide, then animate left
 							var dist = s.get_pos(slideNo,'vertical');
 							var dist_reset = s.get_pos_clone_first('vertical');
+						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
+							//seamless slide left (swiping)
+							var dist = 0;
 						}else{
 							//general slide
 							var dist = s.get_pos(slideNo,'vertical');
@@ -920,14 +929,15 @@
 							var dist_reset = s.get_pos_clone_first();
 						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
 							//seamless slide left (swiping)
-							var dist = (s.width + (parseInt(options.spacing) * xprev))+'px';
+							var dist = 0;
 						}else{
 							//general slide
 							var dist = s.get_pos(slideNo);
 							if(swiping!=true && direction=='right' && prev==1){
-								var dist_reset = s.get_pos_first;
+								var dist_reset = s.get_pos_first();
 							};
 						};
+						console.log(dist);
 						//horizontal - reset
 						if(typeof(dist_reset)!=='undefined'){
 							if(s.transforms){
