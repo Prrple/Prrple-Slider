@@ -7,7 +7,7 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	1.25
+	VERSION:	2.1
 	UPDATED:	2016-08-11
 
 */
@@ -28,13 +28,13 @@
 		el_slider_area:		'.slider_area',		//define slider area element
 		el_slides:			'.slides',			//define slides element
 		el_slide:			'.slide',			//define slide elements
-		el_left:			'.slide_left',		//define left arrow element
-		el_right:			'.slide_right',		//define right arrow element
+		el_left:			'.slider_left',		//define left arrow element
+		el_right:			'.slider_right',	//define right arrow element
+		el_nav:				'.slider_nav',		//define nav dot wrapper
+		el_navdot:			'.slider_navdot',	//define nav dots
 		el_controls:		'.slider_controls',	//define arrow wrapper
 		el_play:			'.slider_play',		//define play button
 		el_pause:			'.slider_pause',	//define pause button
-		el_nav:				'.slider_nav',		//define nav dot wrapper
-		el_navdot:			'.slider_navdot',	//define nav dots
 		//SIZING
 		width:				null,				//define specific width
 		height:				null,				//define specific height
@@ -53,6 +53,7 @@
 		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
 		windowsize:			true,				//resize slider on browser resize
+		richSwiping:		false,				//use rich swiping?
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		firstSlide:			1,					//the slide number to start on
 		callback:			null,				//callback function after a slide changes
@@ -185,7 +186,7 @@
 				//add resize detection
 				s.resize.add();
 				//add swipe control
-				s.add_swipe();
+				s.swipe.add();
 				//hide relevant arrows
 				s.hide_arrows();
 				//easing
@@ -217,9 +218,9 @@
 				s.el.slider_area = s.slider.find(options.el_slider_area);
 				s.el.slides = s.slider.find(options.el_slides);
 				s.el.slide = s.slider.find(options.el_slide);
-				s.el.nav = s.slider.find(options.el_nav);
 				s.el.left = s.slider.find(options.el_left);
 				s.el.right = s.slider.find(options.el_right);
+				s.el.nav = s.slider.find(options.el_nav);
 				s.el.controls = s.slider.find(options.el_controls);
 				s.el.play = s.slider.find(options.el_play);
 				s.el.pause = s.slider.find(options.el_pause);
@@ -584,149 +585,196 @@
 			
 			
 			//SWIPE
-			add_swipe: function(){
-				if(typeof($.fn.swipe)==='undefined'){
-					console.log('Please include the jQuery TouchSwipe plugin for swipe gestures.');
-				}else{
-					/*$('#slider2 .slider').swipe({
-						swipeLeft:function(){
-							$('#slider2 .slider').prrpleSliderRight();
-						},
-						swipeRight:function(){
-							$('#slider2 .slider').prrpleSliderLeft();
-						},
-						threshold:100,
-						allowPageScroll:'vertical',
-						excludedElements: ''
-					});*/
-				};
-			},
-			
-			
-			//RICH SWIPE
-			swipe: function(event, phase, direction, distance, orientation, callback){
-				//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
-				if(s.total>1){
-					if(phase=='start'){
-						//reset position (for seamless swipes)
-						if(s.cloned==true && s.current==1){
-							//first
-							var dist = s.get_pos_first();
-						}else if(s.cloned==true && s.current==s.total){
-							//last
-							var dist = s.get_pos_last();
+			swipe: {
+				//add
+				add: function(){
+					if(typeof($.fn.swipe)==='undefined'){
+						console.log('Please include the jQuery TouchSwipe plugin for swipe gestures.');
+					}else{
+						if(options.richSwiping==true){
+							//rich swiping
+							if(options.direction=='vertical'){
+								//vertical
+								s.slider.swipe({
+									swipeStatus: function swipeStatus(event,phase,direction,distance){
+										s.swipe.rich(event,phase,direction,distance,'vertical');
+									},
+									threshold:100,
+									allowPageScroll:'vertical',
+									excludedElements: ''
+								});
+							}else{
+								//horizontal
+								s.slider.swipe({
+									swipeStatus: function swipeStatus(event,phase,direction,distance){
+										s.swipe.rich(event,phase,direction,distance,'horizontal');
+									},
+									threshold:100,
+									allowPageScroll:'vertical',
+									excludedElements: ''
+								});
+							}
+						}else{
+							//basic swiping
+							if(options.direction=='vertical'){
+								//vertical
+								s.slider.swipe({
+									swipeUp:function(){
+										s.slide_right();
+									},
+									swipeDown:function(){
+										s.slide_left();
+									},
+									threshold:100,
+									allowPageScroll:'horizontal',
+									excludedElements: ''
+								});
+							}else{
+								//horizontal
+								s.slider.swipe({
+									swipeLeft:function(){
+										s.slide_right();
+									},
+									swipeRight:function(){
+										s.slide_left();
+									},
+									threshold:100,
+									allowPageScroll:'vertical',
+									excludedElements: ''
+								});
+							};
 						};
-						if(typeof(dist)!=='undefined'){
-							s.pos_current = parseInt(dist);
+					};
+				},
+				//remove
+				remove: function(){
+					
+				},
+				//rich swiping
+				rich: function(event, phase, direction, distance, orientation, callback){
+					//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
+					if(s.total>1){
+						if(phase=='start'){
+							//reset position (for seamless swipes)
+							if(s.cloned==true && s.current==1){
+								//first
+								var dist = s.get_pos_first();
+							}else if(s.cloned==true && s.current==s.total){
+								//last
+								var dist = s.get_pos_last();
+							};
+							if(typeof(dist)!=='undefined'){
+								s.pos_current = parseInt(dist);
+								if(s.transforms){
+									s.el.slides.stop().removeClass('animate').css({
+										'-webkit-transform': 'translateX('+dist+')',
+										'transform': 'translateX('+dist+')'
+									});
+								}else{
+									s.el.slides.stop().css({
+										left:dist
+									});
+								};
+							};
+							//callback
+							if(typeof(callback) == "function"){
+								callback(s.current,s.total,phase,direction,distance);
+							};
+						}else if(phase=='move'){
+							//get distance
+							if((orientation=='vertical' && direction=='up') || (orientation!='vertical' && direction=='left')){
+								var d = -distance;
+							}else if((orientation=='vertical' && direction=='down') || (orientation!='vertical' && direction=='right')){
+								var d = distance;
+							}else{
+								var d = 0;
+							};
+							var dist = (s.pos_current+d)+'px';
+							//set position
+							if(orientation=='vertical'){
+								if(s.transforms){
+									s.el.slides.stop().removeClass('animate').css({
+										'-webkit-transform': 'translateY('+dist+')',
+										'transform': 'translateY('+dist+')'
+									});
+								}else{
+									s.el.slides.stop().css({
+										top: dist
+									});
+								};
+							}else{
+								if(s.transforms){
+									s.el.slides.stop().removeClass('animate').css({
+										'-webkit-transform': 'translateX('+dist+')',
+										'transform': 'translateX('+dist+')'
+									});
+								}else{
+									s.el.slides.stop().css({
+										left: dist
+									});
+								};
+							};
+							//callback
+							if(typeof(callback) == "function"){
+								callback(s.current,s.total,phase,direction,distance,dist);
+							};
+						}else if(phase=='end'){
+							//go to slide
+							if(orientation=='vertical' && direction=="down" && s.current>1){
+								s.slide_left(true,true);
+							}else if(orientation=='vertical' && direction=="up" && s.current<s.total){
+								s.slide_right(true,true);
+							}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
+								s.slide_left(true,true);
+							}else if(orientation!='vertical' && direction=="left" && (s.current<s.total || s.cloned==true)){
+								s.slide_right(true,true);
+							}else{
+								var c = false;
+								cancel();
+							};
+							//callback
+							if(c!=false){
+								if(typeof(callback) == "function"){
+									callback(s.current,s.total,phase,direction,distance);
+								};
+							};
+						}else{
+							//cancel
+							cancel();
+						};
+					};
+					function cancel(){
+						//get distance
+						var dist = s.pos_current+'px';
+						if(orientation=='vertical'){
 							if(s.transforms){
-								s.el.slides.stop().removeClass('animate').css({
+								s.el.slides.stop().addClass('animate').css({
+									'-webkit-transform': 'translateY('+dist+')',
+									'transform': 'translateY('+dist+')'
+								});
+							}else{
+								s.el.slides.stop().animate({
+									top: dist
+								},options.transitionTime,options.easing);
+							};
+						}else{
+							if(s.transforms){
+								s.el.slides.stop().addClass('animate').css({
 									'-webkit-transform': 'translateX('+dist+')',
 									'transform': 'translateX('+dist+')'
 								});
 							}else{
-								s.el.slides.stop().css({
-									left:dist
-								});
+								s.el.slides.stop().animate({
+									left: dist
+								},options.transitionTime,options.easing);
 							};
 						};
 						//callback
 						if(typeof(callback) == "function"){
 							callback(s.current,s.total,phase,direction,distance);
 						};
-					}else if(phase=='move'){
-						//get distance
-						if((orientation=='vertical' && direction=='up') || (orientation!='vertical' && direction=='left')){
-							var d = -distance;
-						}else if((orientation=='vertical' && direction=='down') || (orientation!='vertical' && direction=='right')){
-							var d = distance;
-						}else{
-							var d = 0;
-						};
-						var dist = (s.pos_current+d)+'px';
-						//set position
-						if(orientation=='vertical'){
-							if(s.transforms){
-								s.el.slides.stop().removeClass('animate').css({
-									'-webkit-transform': 'translateY('+dist+')',
-									'transform': 'translateY('+dist+')'
-								});
-							}else{
-								s.el.slides.stop().css({
-									top: dist
-								});
-							};
-						}else{
-							if(s.transforms){
-								s.el.slides.stop().removeClass('animate').css({
-									'-webkit-transform': 'translateX('+dist+')',
-									'transform': 'translateX('+dist+')'
-								});
-							}else{
-								s.el.slides.stop().css({
-									left: dist
-								});
-							};
-						};
-						//callback
-						if(typeof(callback) == "function"){
-							callback(s.current,s.total,phase,direction,distance,dist);
-						};
-					}else if(phase=='end'){
-						//go to slide
-						if(orientation=='vertical' && direction=="down" && s.current>1){
-							s.slide_left(true,true);
-						}else if(orientation=='vertical' && direction=="up" && s.current<s.total){
-							s.slide_right(true,true);
-						}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
-							s.slide_left(true,true);
-						}else if(orientation!='vertical' && direction=="left" && (s.current<s.total || s.cloned==true)){
-							s.slide_right(true,true);
-						}else{
-							var c = false;
-							cancel();
-						};
-						//callback
-						if(c!=false){
-							if(typeof(callback) == "function"){
-								callback(s.current,s.total,phase,direction,distance);
-							};
-						};
-					}else{
-						//cancel
-						cancel();
 					};
-				};
-				function cancel(){
-					//get distance
-					var dist = s.pos_current+'px';
-					if(orientation=='vertical'){
-						if(s.transforms){
-							s.el.slides.stop().addClass('animate').css({
-								'-webkit-transform': 'translateY('+dist+')',
-								'transform': 'translateY('+dist+')'
-							});
-						}else{
-							s.el.slides.stop().animate({
-								top: dist
-							},options.transitionTime,options.easing);
-						};
-					}else{
-						if(s.transforms){
-							s.el.slides.stop().addClass('animate').css({
-								'-webkit-transform': 'translateX('+dist+')',
-								'transform': 'translateX('+dist+')'
-							});
-						}else{
-							s.el.slides.stop().animate({
-								left: dist
-							},options.transitionTime,options.easing);
-						};
-					};
-					//callback
-					if(typeof(callback) == "function"){
-						callback(s.current,s.total,phase,direction,distance);
-					};
-				};
+				}
 			},
 			
 			
