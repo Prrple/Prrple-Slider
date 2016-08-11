@@ -5,9 +5,7 @@ $(document).ready(function(){
 	
 	
 	/********** SLIDER 1 - FADE **********/
-	$('#slider1 .slider').prrpleSlider({
-		windowsize:				true
-	});
+	$('#slider1 .slider').prrpleSlider();
 	$('#slider1 .slider').swipe({
 		swipeLeft:function(){
 			$('#slider1 .slider').prrpleSliderRight();
@@ -23,7 +21,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 2 - FADE - LOOP **********/
 	$('#slider2 .slider').prrpleSlider({
-		windowsize:				true,
 		loop:					true,
 	});
 	$('#slider2 .slider').swipe({
@@ -41,7 +38,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 3 - SLIDE - HORIZONTAL **********/
 	$('#slider3 .slider').prrpleSlider({
-		windowsize:				true,
 		transition: 			'slide'
 	});
 	$('#slider3 .slider').swipe({
@@ -59,7 +55,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 4 - SLIDE - HORIZONTAL - LOOP **********/
 	$('#slider4 .slider').prrpleSlider({
-		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			false
@@ -79,7 +74,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 5 - SLIDE - HORIZONTAL - LOOP - SEAMLESS **********/
 	$('#slider5 .slider').prrpleSlider({
-		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			true
@@ -99,7 +93,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 6 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider6 .slider').prrpleSlider({
-		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			true
@@ -116,7 +109,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 7 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider7 .slider').prrpleSlider({
-		windowsize:				true,
 		transition: 			'slide',
 		loop:					true,
 		loopSeamless:			true,
@@ -134,7 +126,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 8 - SLIDE - VERTICAL **********/
 	$('#slider8 .slider').prrpleSlider({
-		windowsize:				true,
 		direction:				'vertical',
 		transition: 			'slide'
 	});
@@ -153,7 +144,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 9 - SLIDE - VERTICAL - LOOP **********/
 	$('#slider9 .slider').prrpleSlider({
-		windowsize:				true,
 		direction:				'vertical',
 		transition: 			'slide',
 		loop:					true,
@@ -174,7 +164,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 10 - SLIDE - VERTICAL - LOOP - SEAMLESS **********/
 	$('#slider10 .slider').prrpleSlider({
-		windowsize:				true,
 		direction:				'vertical',
 		transition: 			'slide',
 		loop:					true,
@@ -195,7 +184,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 11 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider11 .slider').prrpleSlider({
-		windowsize:				true,
 		direction:				'vertical',
 		transition: 			'slide',
 		loop:					true,
@@ -213,7 +201,6 @@ $(document).ready(function(){
 	
 	/********** SLIDER 12 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING **********/
 	$('#slider12 .slider').prrpleSlider({
-		windowsize:				true,
 		direction:				'vertical',
 		transition: 			'slide',
 		loop:					true,
@@ -230,17 +217,6 @@ $(document).ready(function(){
 	});
 	
 	
-});
-
-
-var resize;
-$(window).resize(function(){
-	clearTimeout(resize);
-	resize = setTimeout(function(){
-		$('.slider').each(function(){
-			$(this).prrpleSliderResize();
-		});
-	},100);
 });
 
 

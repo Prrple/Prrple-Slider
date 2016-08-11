@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	1.24
-	UPDATED:	2016-03-13
+	VERSION:	1.25
+	UPDATED:	2016-08-11
 
 */
 
@@ -52,7 +52,7 @@
 		autoPlayInterval:	4000,				//how often to automatically switch between slides
 		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
-		windowsize:			false,				//resize slider on browser resize
+		windowsize:			true,				//resize slider on browser resize
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		firstSlide:			1,					//the slide number to start on
 		callback:			null,				//callback function after a slide changes
@@ -182,6 +182,10 @@
 				s.add_arrows();
 				//add nav controls
 				s.add_controls();
+				//add resize detection
+				s.resize.add();
+				//add swipe control
+				s.add_swipe();
 				//hide relevant arrows
 				s.hide_arrows();
 				//easing
@@ -443,6 +447,39 @@
 			},
 			
 			
+			//WINDOW RESIZE
+			resize: {
+				//add
+				add: function(){
+					if(options.windowsize==true){
+						$(window).load(s.resize.delay);
+						$(window).resize(s.resize.delay);
+					};
+				},
+				//remove
+				remove: function(){
+					$(window).off("resize",s.resize.delay);
+				},
+				//delay
+				t: null,
+				delay: function(){
+					clearTimeout(s.resize.t);
+					s.resize.t = setTimeout(function(){
+						s.resize.run();
+					},100);
+				},
+				//run
+				run: function(){
+					//dimensions
+					s.get_dims();
+					s.update_size();
+					s.update_visibility();
+					//go to current
+					s.goTo(s.current,true);
+				}
+			},
+			
+			
 			//HIDE RELEVANT ARROWS
 			hide_arrows: function(){
 				if(options.loop==false && options.firstSlide==1){
@@ -547,6 +584,26 @@
 			
 			
 			//SWIPE
+			add_swipe: function(){
+				if(typeof($.fn.swipe)==='undefined'){
+					console.log('Please include the jQuery TouchSwipe plugin for swipe gestures.');
+				}else{
+					/*$('#slider2 .slider').swipe({
+						swipeLeft:function(){
+							$('#slider2 .slider').prrpleSliderRight();
+						},
+						swipeRight:function(){
+							$('#slider2 .slider').prrpleSliderLeft();
+						},
+						threshold:100,
+						allowPageScroll:'vertical',
+						excludedElements: ''
+					});*/
+				};
+			},
+			
+			
+			//RICH SWIPE
 			swipe: function(event, phase, direction, distance, orientation, callback){
 				//console.log(phase+' - '+direction+' - '+distance+' - '+orientation);
 				if(s.total>1){
@@ -854,6 +911,8 @@
 				//REMOVE CSS
 				s.slider.find('*').removeAttr('style');
 				s.slider.removeClass('slider_init fade slide');
+				//REMOVE RESIZE DETECTION
+				s.resize.remove();
 			}
 			
 			
@@ -888,12 +947,7 @@
 			s.swipe(event, phase, direction, distance, orientation, callback);
 		};
 		this.resizeSlider = function(){
-			//dimensions
-			s.get_dims();
-			s.update_size();
-			s.update_visibility();
-			//go to current
-			s.goTo(s.current,true);
+			s.resize.run();
 		};
 		this.removeSlider = function(){
 			s.remove();
