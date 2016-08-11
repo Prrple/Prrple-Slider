@@ -405,8 +405,8 @@
 					$(s.el.right).show();
 					if(s.el.left.length > 0){
 						//reset
-						s.el.left.removeClass('slide_left_inactive');
-						s.el.right.removeClass('slide_right_inactive');
+						s.el.left.removeClass('slider_left_inactive');
+						s.el.right.removeClass('slider_right_inactive');
 						//right
 						$(s.el.right).unbind('click').click(function(){
 							s.slide_right();
@@ -484,9 +484,9 @@
 			//HIDE RELEVANT ARROWS
 			hide_arrows: function(){
 				if(options.loop==false && options.firstSlide==1){
-					s.el.left.addClass('slide_left_inactive');
+					s.el.left.addClass('slider_left_inactive');
 				}else if(options.loop==false && options.firstSlide==s.total){
-					s.el.right.addClass('slide_right_inactive');
+					s.el.right.addClass('slider_right_inactive');
 				};
 			},
 			
@@ -548,7 +548,7 @@
 			
 			//SLIDE LEFT
 			slide_left: function(skip_pause,swiping){
-				if(s.total>1 && !s.el.left.hasClass('slide_left_inactive')){
+				if(s.total>1 && !s.el.left.hasClass('slider_left_inactive')){
 					//go to next slide
 					if(s.current > 1){
 						s.goTo(s.current-1,false,'left',swiping);
@@ -567,7 +567,7 @@
 			
 			//SLIDE RIGHT
 			slide_right: function(skip_pause,swiping){
-				if(s.total>1 && !s.el.right.hasClass('slide_right_inactive')){
+				if(s.total>1 && !s.el.right.hasClass('slider_right_inactive')){
 					//go to next slide
 					if(s.current < s.total){
 						s.goTo(s.current+1,false,'right',swiping);
@@ -918,17 +918,17 @@
 				//arrows
 				if(slideNo == 1){
 					if(options.loop==false){
-						s.el.left.addClass('slide_left_inactive');
+						s.el.left.addClass('slider_left_inactive');
 					};
 				}else{
-					s.el.left.removeClass('slide_left_inactive');
+					s.el.left.removeClass('slider_left_inactive');
 				};
 				if(slideNo == s.total){
 					if(options.loop==false){
-						s.el.right.addClass('slide_right_inactive');
+						s.el.right.addClass('slider_right_inactive');
 					};
 				}else{
-					s.el.right.removeClass('slide_right_inactive');
+					s.el.right.removeClass('slider_right_inactive');
 				};
 				//save current position
 				s.pos_current = parseInt(dist);

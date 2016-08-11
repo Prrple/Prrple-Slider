@@ -8,10 +8,10 @@
 .slider .slide{ display:block; position:relative; float:left; }
 .slider.fade .slide{ display:block; position:absolute; top:0; left:0; width:100%; }
 /*.slider.vertical .slide{ float:none; }*/
-.slider .slide_clear{ display:block; position:relative; height:0; clear:both; }
-.slider .slide_left, .slider .slide_right{ display:none; color:#333; cursor:pointer; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
-.slider .slide_left:hover, .slider .slide_right:hover{ color:#888; }
-.slider .slide_left.slide_left_inactive, .slider .slide_right.slide_right_inactive{	cursor:default; color:#CCC; }
+.slider .slider_clear{ display:block; position:relative; height:0; clear:both; }
+.slider .slider_left, .slider .slider_right{ display:none; color:#333; cursor:pointer; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
+.slider .slider_left:hover, .slider .slider_right:hover{ color:#888; }
+.slider .slider_left.slider_left_inactive, .slider .slider_right.slider_right_inactive{	cursor:default; color:#CCC; }
 .slider .slider_nav{ display:block; position:relative; text-align:center; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
 .slider .slider_navdot{ display:inline-block; width:10px; height:10px; background:#DDD; }
 .slider .slider_navdot.current{ background:#AAA; }

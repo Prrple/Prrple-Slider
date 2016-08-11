@@ -358,30 +358,30 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 	background:#666;
 }
 
-.slider .slide_left,
-.slider .slide_right{
+.slider .slider_left,
+.slider .slider_right{
 	display:block;
 	position:absolute;
 	top:40%;
 	left:10px;
 	padding:10px;
 }
-.slider .slide_right{
+.slider .slider_right{
 	left:auto;
 	right:10px;
 }
 
 
 
-.slider.vertical .slide_left,
-.slider.vertical .slide_right{
+.slider.vertical .slider_left,
+.slider.vertical .slider_right{
 	width:100px;
 	left:50%;
 	top:10px;
 	margin:0 -60px;
 	text-align:center;
 }
-.slider.vertical .slide_right{
+.slider.vertical .slider_right{
 	top:auto;
 	bottom:10px;
 }
