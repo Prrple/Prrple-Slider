@@ -336,6 +336,17 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 }
 
 
+.slide.current .slidetitle{
+	color:#f00;
+}
+.slide.prev .slidetitle{
+	color:#0f0;
+}
+.slide.next .slidetitle{
+	color:#00f;
+}
+
+
 .slider .slider_nav{
 	position:absolute;
 	width:100%;

@@ -200,7 +200,7 @@
 				if(options.firstSlide!=1){
 					s.goTo(options.firstSlide,true);
 				}else{
-					s.slider.find(options.el_slide+':nth-child(1)').addClass('current');
+					//s.slider.find(options.el_slide+':nth-child(1)').addClass('current');
 				};
 				//callback
 				if(typeof(options.callback)==='function'){
@@ -288,7 +288,17 @@
 						s.el.slides.css({
 							width: (s.width * (s.total+2))
 						});
-						s.height = s.el.slider_area.innerHeight();
+						if(options.direction=='vertical'){
+							s.height = 0;
+							s.slider.find(options.el_slide).each(function(){
+								var h2 = $(this).height();
+								if(h2 > s.height){
+									s.height = h2;
+								};
+							});
+						}else{
+							s.height = s.el.slider_area.innerHeight();
+						};
 						return false;
 					};
 					var h3 = s.slider.height();
@@ -528,40 +538,40 @@
 				if(options.debug){console.log('get_pos');};
 				var l = (direction=='vertical'?s.height:s.width);
 				var total = (s.cloned==true?slide:slide-1);
-				//var total = slide-1;
 				return '-'+((total * l) + (parseInt(options.spacing) * total))+'px';
 			},
+			
 			
 			//GET POSITION - FIRST SLIDE
 			get_pos_first: function(direction){
 				if(options.debug){console.log('get_pos_first');};
-				var l = (direction=='vertical'?s.height:s.width);
 				if(s.cloned==true){
+					var l = (direction=='vertical'?s.height:s.width);
 					return -(l + (parseInt(options.spacing)))+'px';
-					//return '0px';
 				}else{
 					return '0px';
 				};
 			},
+			
 			
 			//GET POSITION - LAST SLIDE
 			get_pos_last: function(direction){
 				if(options.debug){console.log('get_pos_last');};
 				var l = (direction=='vertical'?s.height:s.width);
 				var total = (s.cloned==true?s.total:s.total-1);
-				//var total = s.total-1;
 				return parseInt('-'+((total * l) + (parseInt(options.spacing) * total)));
 			},
+			
 			
 			//GET POSITION - CLONED FIRST SLIDE (AT END)
 			get_pos_clone_first: function(direction){
 				if(options.debug){console.log('get_pos_clone_first');};
 				var l = (direction=='vertical'?s.height:s.width);
 				var total = (s.cloned==true?s.total:s.total-1);
-				//var total = s.total-1;
 				var total2 = total+1;
 				return '-'+((total2 * l) + (parseInt(options.spacing) * total))+'px';
 			},
+			
 			
 			//GET POSITION - CLONED LAST SLIDE (AT START)
 			get_pos_clone_last: function(direction){
@@ -683,14 +693,14 @@
 					if(s.total>1){
 						if(phase=='start'){
 							//reset position (for seamless swipes)
+							if(s.cloned==true && s.current==1){
+								//first
+								var dist = s.get_pos_first(options.direction);
+							}else if(s.cloned==true && s.current==s.total){
+								//last
+								var dist = s.get_pos_last(options.direction);
+							};
 							if(orientation=='vertical'){
-								if(s.cloned==true && s.current==1){
-									//first
-									var dist = s.get_pos_first('vertical');
-								}else if(s.cloned==true && s.current==s.total){
-									//last
-									var dist = s.get_pos_last('vertical');
-								};
 								if(typeof(dist)!=='undefined'){
 									s.pos_current = parseInt(dist);
 									if(s.transforms){
@@ -705,13 +715,6 @@
 									};
 								};
 							}else{
-								if(s.cloned==true && s.current==1){
-									//first
-									var dist = s.get_pos_first();
-								}else if(s.cloned==true && s.current==s.total){
-									//last
-									var dist = s.get_pos_last();
-								};
 								if(typeof(dist)!=='undefined'){
 									s.pos_current = parseInt(dist);
 									if(s.transforms){
@@ -771,10 +774,10 @@
 						}else if(phase=='end'){
 							//go to slide
 							if(orientation=='vertical' && direction=="down" && (s.current>1 || s.cloned==true)){
-								//vertical down
+								//vertical up
 								s.slide_left(true,true);
 							}else if(orientation=='vertical' && direction=="up" && (s.current<s.total || s.cloned==true)){
-								//vertical up
+								//vertical down
 								s.slide_right(true,true);
 							}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
 								//horizontal left
@@ -835,7 +838,6 @@
 			//GO TO SLIDE
 			goTo: function(slideNo,skip,direction,swiping){
 				if(options.debug){console.log('goTo');};
-				console.log(s.current,slideNo);
 				//time
 				if(skip==true){
 					var time = 0;
@@ -873,26 +875,26 @@
 					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
 				}else if(options.transition == 'slide'){
 					//slide
-					if(options.direction == 'vertical'){
-						if(options.debug){console.log('vertical');};
-						//vertical - get position
-						if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
-							//seamless slide right - animate to cloned first slide
-							var dist = s.get_pos_clone_first('vertical');
-						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true){
-							//seamless slide left - reset to cloned first slide, then animate left
-							var dist = s.get_pos(slideNo,'vertical');
-							var dist_reset = s.get_pos_clone_first('vertical');
-						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
-							//seamless slide left (swiping)
-							var dist = 0;
-						}else{
-							//general slide
-							var dist = s.get_pos(slideNo,'vertical');
-							if(swiping!=true && direction=='right' && prev==1){
-								var dist_reset = s.get_pos_first('vertical');
-							};
+					if(options.debug){console.log(options.direction);};
+					//get position
+					if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
+						//seamless slide right - animate to cloned first slide
+						var dist = s.get_pos_clone_first(options.direction);
+					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true){
+						//seamless slide left - reset to cloned first slide, then animate left
+						var dist = s.get_pos(slideNo,options.direction);
+						var dist_reset = s.get_pos_clone_first(options.direction);
+					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
+						//seamless slide left (swiping)
+						var dist = 0;
+					}else{
+						//general slide
+						var dist = s.get_pos(slideNo,options.direction);
+						if(swiping!=true && direction=='right' && prev==1){
+							var dist_reset = s.get_pos_first(options.direction);
 						};
+					};
+					if(options.direction == 'vertical'){
 						//vertical - reset
 						if(typeof(dist_reset)!=='undefined'){
 							if(s.transforms){
@@ -908,7 +910,12 @@
 						};
 						//vertical - animate
 						if(s.transforms){
-							s.el.slides.stop(true,true).addClass('animate').css({
+							if(skip==true){
+								s.el.slides.stop(true,true).removeClass('animate');
+							}else{
+								s.el.slides.stop(true,true).addClass('animate');
+							};
+							s.el.slides.stop(true,true).css({
 								'-webkit-transform': 'translateY('+dist+')',
 								'transform': 'translateY('+dist+')'
 							});
@@ -918,26 +925,6 @@
 							},time,options.easing);
 						};
 					}else{
-						if(options.debug){console.log('horizontal');};
-						//horizontal - get positions
-						if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
-							//seamless slide right - animate to cloned first slide
-							var dist = s.get_pos_clone_first();
-						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true){
-							//seamless slide left - reset to cloned first slide, then animate left
-							var dist = s.get_pos(slideNo);
-							var dist_reset = s.get_pos_clone_first();
-						}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
-							//seamless slide left (swiping)
-							var dist = 0;
-						}else{
-							//general slide
-							var dist = s.get_pos(slideNo);
-							if(swiping!=true && direction=='right' && prev==1){
-								var dist_reset = s.get_pos_first();
-							};
-						};
-						console.log(dist);
 						//horizontal - reset
 						if(typeof(dist_reset)!=='undefined'){
 							if(s.transforms){
@@ -953,7 +940,12 @@
 						};
 						//horizontal - animate
 						if(s.transforms){
-							s.el.slides.stop(true,true).addClass('animate').css({
+							if(skip==true){
+								s.el.slides.stop(true,true).removeClass('animate');
+							}else{
+								s.el.slides.stop(true,true).addClass('animate');
+							};
+							s.el.slides.stop(true,true).css({
 								'-webkit-transform': 'translateX('+dist+')',
 								'transform': 'translateX('+dist+')'
 							});
@@ -966,14 +958,14 @@
 				};
 				//class
 				s.slider.find(options.el_slide).removeClass('current prev next');
-				s.slider.find(options.el_slide+':nth-child('+(s.current)+')').addClass('current');
-				s.slider.find(options.el_slide+':nth-child('+(s.prev)+')').addClass('prev');
-				s.slider.find(options.el_slide+':nth-child('+(s.next)+')').addClass('next');
+				s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current');
+				s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev');
+				s.slider.find(options.el_slide+':nth-child('+(s.next+(s.cloned==true?1:0))+')').addClass('next');
 				setTimeout(function(){
 					s.slider.find(options.el_slide).removeClass('current2 prev2 next2');
-					s.slider.find(options.el_slide+':nth-child('+(s.current)+')').addClass('current2');
-					s.slider.find(options.el_slide+':nth-child('+(s.prev)+')').addClass('prev2');
-					s.slider.find(options.el_slide+':nth-child('+(s.next)+')').addClass('next2');
+					s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current2');
+					s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev2');
+					s.slider.find(options.el_slide+':nth-child('+(s.next+(s.cloned==true?1:0))+')').addClass('next2');
 				},time);
 				//interval
 				s.autoplay();
@@ -1024,6 +1016,8 @@
 				s.slider.removeClass('slider_init fade slide');
 				//REMOVE RESIZE DETECTION
 				s.resize.remove();
+				//REMOVE TOUCHSWIPE
+				s.swipe.remove();
 			}
 			
 			
