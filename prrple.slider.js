@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.3
-	UPDATED:	2016-08-11
+	VERSION:	2.4
+	UPDATED:	2016-08-12
 
 */
 
@@ -163,7 +163,7 @@
 			init: function(){
 				if(options.debug){console.log('init');};
 				//transforms
-				s.transforms = (options.csstransforms!=true?false:(typeof(Modernizr)!=='undefined'?Modernizr.csstransforms:false));
+				s.transforms = (options.csstransforms!=true?false:s.test_transforms());
 				//cloned
 				s.cloned = (options.transition=='slide' && options.loop==true && options.loopSeamless==true?true:false);
 				//get elements
@@ -213,6 +213,19 @@
 				s.autoplay();
 				//add inited class
 				s.slider.addClass('slider_init');
+			},
+			
+			
+			//TEST FOR CSS TRANSFORMS
+			test_transforms: function(){
+				var prefixes = 'transform WebkitTransform'.split(' '); //MozTransform OTransform msTransform
+				var div = document.createElement('div');
+				for(var i = 0; i < prefixes.length; i++) {
+					if(div && div.style[prefixes[i]] !== undefined) {
+						return true;//prefixes[i];
+					};
+				};
+				return false;
 			},
 			
 			
@@ -602,7 +615,7 @@
 			
 			//SLIDE RIGHT
 			slide_right: function(skip_pause,swiping){
-				if(!options.debug){console.log('slide_right');};
+				if(options.debug){console.log('slide_right');};
 				if(s.total>1 && !s.el.right.hasClass('slider_right_inactive')){
 					//go to next slide
 					if(s.current < s.total){
@@ -837,7 +850,7 @@
 			
 			//GO TO SLIDE
 			goTo: function(slideNo,skip,direction,swiping){
-				if(!options.debug){console.log('goTo');};
+				if(options.debug){console.log('goTo');};
 				//time
 				if(skip==true){
 					var time = 0;
@@ -871,7 +884,6 @@
 				//animate slider
 				if(options.transition == 'fade'){
 					//fade
-					console.log(slideNo);
 					s.slider.find(options.el_slide).fadeOut(time);
 					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
 				}else if(options.transition == 'slide'){
