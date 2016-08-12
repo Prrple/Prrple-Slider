@@ -43,11 +43,12 @@
 		spacing:			0,					//spacing between slides
 		//ANIMATION
 		direction:			'horizontal',		//horizontal, vertical
-		transition:			'fade',				//fade, slide
+		transition:			'slide',			//fade, slide
 		transitionTime:		500,				//how long to change slides
-		easing: 			'swing',			//requires jquery easing plugin
-		loop:				false,				//whether or not to infinitely loop the slider
+		easing: 			'swing',			//animation easing
+		loop:				true,				//whether or not to infinitely loop the slider
 		loopSeamless:		true,				//whether or not a looping slider should seamlessly rotate
+		richSwiping:		true,				//use rich swiping?
 		csstransforms:		false,				//use css transforms?
 		//AUTOPLAY
 		autoPlay:			false,				//play slider automatically?
@@ -55,7 +56,6 @@
 		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
 		windowsize:			true,				//resize slider on browser resize
-		richSwiping:		false,				//use rich swiping?
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		firstSlide:			1,					//the slide number to start on
 		callback:			null,				//callback function after a slide changes
@@ -602,7 +602,7 @@
 			
 			//SLIDE RIGHT
 			slide_right: function(skip_pause,swiping){
-				if(options.debug){console.log('slide_right');};
+				if(!options.debug){console.log('slide_right');};
 				if(s.total>1 && !s.el.right.hasClass('slider_right_inactive')){
 					//go to next slide
 					if(s.current < s.total){
@@ -627,7 +627,7 @@
 					if(typeof($.fn.swipe)==='undefined'){
 						console.log('Please include the jQuery TouchSwipe plugin for swipe gestures.');
 					}else{
-						if(options.richSwiping==true){
+						if(options.richSwiping==true && options.transition=='slide'){
 							//rich swiping
 							if(options.direction=='vertical'){
 								//vertical
@@ -837,7 +837,7 @@
 			
 			//GO TO SLIDE
 			goTo: function(slideNo,skip,direction,swiping){
-				if(options.debug){console.log('goTo');};
+				if(!options.debug){console.log('goTo');};
 				//time
 				if(skip==true){
 					var time = 0;
@@ -871,6 +871,7 @@
 				//animate slider
 				if(options.transition == 'fade'){
 					//fade
+					console.log(slideNo);
 					s.slider.find(options.el_slide).fadeOut(time);
 					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
 				}else if(options.transition == 'slide'){
