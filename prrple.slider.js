@@ -56,8 +56,9 @@
 		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
 		windowsize:			true,				//resize slider on browser resize
-		addArrows:			true,				//if arrows don't exist, dynamically add them
+		addElements:		true,				//if arrows don't exist, dynamically add them
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
+		textDots:			false,				//add test to dots (using data-nav attribute)
 		firstSlide:			1,					//the slide number to start on
 		callback:			null,				//callback function after a slide changes
 		callback_end:		null				//callback function after a slide changes and animation completes
@@ -410,12 +411,27 @@
 			add_dots: function(){
 				if(options.debug){console.log('add_dots');};
 				if(s.total <= 1){
+					//hide dots if 1 or less slides
 					s.el.nav.hide();
 				}else{
+					//add dot wrapper if doesn't exist
+					if(options.addElements){
+						if(s.el.nav.length<1){
+							s.slider.append('<div class="'+(options.el_nav.replace('.',''))+'"></div>');
+						};
+						s.el.nav = s.slider.find(options.el_nav);
+					};
+					//create dots
 					s.el.nav.html('');
 					for(i=1; i<(s.total+1); i++){
-						s.el.nav.append('<a class="slider_navdot '+(i==1?'current':'')+'" id="slider_navdot_'+i+'" >'+i+'</a>');
+						if(options.textDots){
+							var t = s.slider.find(options.el_slide+':nth-child('+(s.cloned==true?i+1:i)+')').attr('data-nav');
+						}else{
+							var t = i;
+						};
+						s.el.nav.append('<a class="slider_navdot '+(i==1?'current':'')+'" id="slider_navdot_'+i+'" >'+t+'</a>');
 					};
+					//bind events
 					s.el.nav.find(options.el_navdot).each(function(){
 						$(this).unbind( "click" );
 						$(this).click(function(){
@@ -435,34 +451,36 @@
 				if(s.total <= 1){
 					//hide arrows if 1 or less slides
 					if(options.hideArrows == true){
-						$(s.el.left).hide();
-						$(s.el.right).hide();
+						s.el.left.hide();
+						s.el.right.hide();
 					};
 				}else{
-					//add arrows
-					if($(s.el.left).length<1){
-						$(s.slider).append('<a class="'+(options.el_left.replace('.',''))+'">Prev</a>');
+					//add arrows if they don't exists
+					if(options.addElements){
+						if(s.el.left.length<1){
+							s.slider.append('<a class="'+(options.el_left.replace('.',''))+'">Prev</a>');
+						};
+						if(s.el.right.length<1){
+							s.slider.append('<a class="'+(options.el_right.replace('.',''))+'">Next</a>');
+						};
+						s.el.left = s.slider.find(options.el_left);
+						s.el.right = s.slider.find(options.el_right);
 					};
-					if($(s.el.right).length<1){
-						$(s.slider).append('<a class="'+(options.el_right.replace('.',''))+'">Next</a>');
-					};
-					s.el.left = s.slider.find(options.el_left);
-					s.el.right = s.slider.find(options.el_right);
 					//show and bind events
-					$(s.el.left).show();
-					$(s.el.right).show();
+					s.el.left.show();
+					s.el.right.show();
 					if(s.el.left.length > 0){
 						//reset
-						s.el.left.removeClass('slider_left_inactive');
-						s.el.right.removeClass('slider_right_inactive');
+						s.el.left.removeClass('inactive');
+						s.el.right.removeClass('inactive');
 						//right
-						$(s.el.right).unbind('click').click(function(){
+						s.el.right.unbind('click').click(function(){
 							if(options.debug){console.log('--- click right ---');};
 							s.slide_right();
 							return false;
 						});
 						//left
-						$(s.el.left).unbind('click').click(function(){
+						s.el.left.unbind('click').click(function(){
 							if(options.debug){console.log('--- click left ---');};
 							s.slide_left();
 							return false;
@@ -476,22 +494,22 @@
 			add_controls: function(){
 				if(options.debug){console.log('add_controls');};
 				if(s.total <= 1){
-					$(s.el.controls).hide();
+					s.el.controls.hide();
 				}else{
-					$(s.el.controls).show();
-					$(s.el.play).addClass('hidden');
-					$(s.el.pause).removeClass('hidden');
+					s.el.controls.show();
+					s.el.play.addClass('hidden');
+					s.el.pause.removeClass('hidden');
 					//pause
-					$(s.el.pause).unbind('click').click(function(){
-						$(s.el.pause).addClass('hidden');
-						$(s.el.play).removeClass('hidden');
+					s.el.pause.unbind('click').click(function(){
+						s.el.pause.addClass('hidden');
+						s.el.play.removeClass('hidden');
 						s.paused = true;
 						return false;
 					});
 					//resume
-					$(s.el.play).unbind('click').click(function(){
-						$(s.el.play).addClass('hidden');
-						$(s.el.pause).removeClass('hidden');
+					s.el.play.unbind('click').click(function(){
+						s.el.play.addClass('hidden');
+						s.el.pause.removeClass('hidden');
 						s.paused = false;
 						return false;
 					});
@@ -536,9 +554,9 @@
 			hide_arrows: function(){
 				if(options.debug){console.log('hide_arrows');};
 				if(options.loop==false && options.firstSlide==1){
-					s.el.left.addClass('slider_left_inactive');
+					s.el.left.addClass('inactive');
 				}else if(options.loop==false && options.firstSlide==s.total){
-					s.el.right.addClass('slider_right_inactive');
+					s.el.right.addClass('inactive');
 				};
 			},
 			
@@ -608,7 +626,7 @@
 			//SLIDE LEFT
 			slide_left: function(skip_pause,swiping){
 				if(options.debug){console.log('slide_left');};
-				if(s.total>1 && !s.el.left.hasClass('slider_left_inactive')){
+				if(s.total>1 && !s.el.left.hasClass('inactive')){
 					//go to next slide
 					if(s.current > 1){
 						s.goTo(s.current-1,false,'left',swiping);
@@ -628,7 +646,7 @@
 			//SLIDE RIGHT
 			slide_right: function(skip_pause,swiping){
 				if(options.debug){console.log('slide_right');};
-				if(s.total>1 && !s.el.right.hasClass('slider_right_inactive')){
+				if(s.total>1 && !s.el.right.hasClass('inactive')){
 					//go to next slide
 					if(s.current < s.total){
 						s.goTo(s.current+1,false,'right',swiping);
@@ -997,17 +1015,17 @@
 				//arrows
 				if(slideNo == 1){
 					if(options.loop==false){
-						s.el.left.addClass('slider_left_inactive');
+						s.el.left.addClass('inactive');
 					};
 				}else{
-					s.el.left.removeClass('slider_left_inactive');
+					s.el.left.removeClass('inactive');
 				};
 				if(slideNo == s.total){
 					if(options.loop==false){
-						s.el.right.addClass('slider_right_inactive');
+						s.el.right.addClass('inactive');
 					};
 				}else{
-					s.el.right.removeClass('slider_right_inactive');
+					s.el.right.removeClass('inactive');
 				};
 				//save current position
 				s.pos_current = parseInt(dist);

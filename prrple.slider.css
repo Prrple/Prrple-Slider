@@ -11,7 +11,7 @@
 .slider .slider_clear{ display:block; position:relative; height:0; clear:both; }
 .slider .slider_left, .slider .slider_right{ display:none; color:#333; cursor:pointer; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
 .slider .slider_left:hover, .slider .slider_right:hover{ color:#888; }
-.slider .slider_left.slider_left_inactive, .slider .slider_right.slider_right_inactive{	cursor:default; color:#CCC; }
+.slider .slider_left.inactive, .slider .slider_right.inactive{	cursor:default; color:#CCC; }
 .slider .slider_nav{ display:block; position:relative; text-align:center; -webkit-user-select:none; -moz-user-select:none; -ms-user-select:none; -o-user-select:none; user-select:none; }
 .slider .slider_navdot{ display:inline-block; width:10px; height:10px; background:#DDD; }
 .slider .slider_navdot.current{ background:#AAA; }
