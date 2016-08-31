@@ -199,11 +199,7 @@
 					options.easing = 'swing';
 				};
 				//go to initial slide
-				if(options.firstSlide!=1){
-					s.goTo(options.firstSlide,true);
-				}else{
-					//s.slider.find(options.el_slide+':nth-child(1)').addClass('current');
-				};
+				s.goTo(options.firstSlide,true);;
 				//callback
 				if(typeof(options.callback)==='function'){
 					options.callback(s.current,s.total);
