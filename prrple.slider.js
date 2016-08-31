@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.4
-	UPDATED:	2016-08-12
+	VERSION:	2.5
+	UPDATED:	2016-08-31
 
 */
 
@@ -56,6 +56,7 @@
 		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
 		windowsize:			true,				//resize slider on browser resize
+		addArrows:			true,				//if arrows don't exist, dynamically add them
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		firstSlide:			1,					//the slide number to start on
 		callback:			null,				//callback function after a slide changes
@@ -432,11 +433,22 @@
 			add_arrows: function(){
 				if(options.debug){console.log('add_arrows');};
 				if(s.total <= 1){
+					//hide arrows if 1 or less slides
 					if(options.hideArrows == true){
 						$(s.el.left).hide();
 						$(s.el.right).hide();
 					};
 				}else{
+					//add arrows
+					if($(s.el.left).length<1){
+						$(s.slider).append('<a class="'+(options.el_left.replace('.',''))+'">Prev</a>');
+					};
+					if($(s.el.right).length<1){
+						$(s.slider).append('<a class="'+(options.el_right.replace('.',''))+'">Next</a>');
+					};
+					s.el.left = s.slider.find(options.el_left);
+					s.el.right = s.slider.find(options.el_right);
+					//show and bind events
 					$(s.el.left).show();
 					$(s.el.right).show();
 					if(s.el.left.length > 0){
