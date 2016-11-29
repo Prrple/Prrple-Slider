@@ -4,52 +4,59 @@
 $(document).ready(function(){
 	
 	
-	/********** SLIDER 1 - FADE **********/
-	$('#slider1 .slider').prrpleSlider({
+	/********** SLIDER F1 - FADE **********/
+	$('#sliderf1 .slider').prrpleSlider({
 		transition: 			'fade',
 		loop:					false
 	});
 	
 	
-	/********** SLIDER 2 - FADE - LOOP **********/
-	$('#slider2 .slider').prrpleSlider({
+	/********** SLIDER F2 - FADE - LOOP **********/
+	$('#sliderf2 .slider').prrpleSlider({
 		transition: 			'fade'
 	});
 	
 	
-	/********** SLIDER 3 - SLIDE - HORIZONTAL **********/
-	$('#slider3 .slider').prrpleSlider({
+	/********** SLIDER H1 - SLIDE - HORIZONTAL **********/
+	$('#sliderh1 .slider').prrpleSlider({
 		loop:					false,
 		loopSeamless:			false,
 		richSwiping:			false
 	});
 	
 	
-	/********** SLIDER 4 - SLIDE - HORIZONTAL - LOOP **********/
-	$('#slider4 .slider').prrpleSlider({
+	/********** SLIDER H2 - SLIDE - HORIZONTAL - LOOP **********/
+	$('#sliderh2 .slider').prrpleSlider({
 		loopSeamless:			false,
 		richSwiping:			false
 	});
 	
 	
-	/********** SLIDER 5 - SLIDE - HORIZONTAL - LOOP - SEAMLESS **********/
-	$('#slider5 .slider').prrpleSlider({
+	/********** SLIDER H3 - SLIDE - HORIZONTAL - LOOP - SEAMLESS **********/
+	$('#sliderh3 .slider').prrpleSlider({
 		richSwiping:			false
 	});
 	
 	
-	/********** SLIDER 6 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING **********/
-	$('#slider6 .slider').prrpleSlider();
+	/********** SLIDER H4 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING **********/
+	$('#sliderh4 .slider').prrpleSlider();
 	
 	
-	/********** SLIDER 7 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING - CSS TRANSFORMS **********/
-	$('#slider7 .slider').prrpleSlider({
+	/********** SLIDER H5 - SLIDE - HORIZONTAL - LOOP - SEAMLESS - RICH SWIPING - CSS TRANSFORMS **********/
+	$('#sliderh5 .slider').prrpleSlider({
 		csstransforms:			true
 	});
 	
 	
-	/********** SLIDER 8 - SLIDE - VERTICAL **********/
-	$('#slider8 .slider').prrpleSlider({
+	/********** SLIDER H6 - MULTIPLE **********/
+	$('#sliderh6 .slider').prrpleSlider({
+		multiple:4,
+		transitionTime:250
+	});
+	
+	
+	/********** SLIDER V1 - SLIDE - VERTICAL **********/
+	$('#sliderv1 .slider').prrpleSlider({
 		direction:				'vertical',
 		loop:					false,
 		loopSeamless:			false,
@@ -57,31 +64,39 @@ $(document).ready(function(){
 	});
 	
 	
-	/********** SLIDER 9 - SLIDE - VERTICAL - LOOP **********/
-	$('#slider9 .slider').prrpleSlider({
+	/********** SLIDER V2 - SLIDE - VERTICAL - LOOP **********/
+	$('#sliderv2 .slider').prrpleSlider({
 		direction:				'vertical',
 		loopSeamless:			false,
 		richSwiping:			false
 	});
 	
 	
-	/********** SLIDER 10 - SLIDE - VERTICAL - LOOP - SEAMLESS **********/
-	$('#slider10 .slider').prrpleSlider({
+	/********** SLIDER V3 - SLIDE - VERTICAL - LOOP - SEAMLESS **********/
+	$('#sliderv3 .slider').prrpleSlider({
 		direction:				'vertical',
 		richSwiping:			false
 	});
 	
 	
-	/********** SLIDER 11 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING **********/
-	$('#slider11 .slider').prrpleSlider({
+	/********** SLIDER V4 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING **********/
+	$('#sliderv4 .slider').prrpleSlider({
 		direction:				'vertical'
 	});
 	
 	
-	/********** SLIDER 12 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING - CSS TRANSFORMS **********/
-	$('#slider12 .slider').prrpleSlider({
+	/********** SLIDER V5 - SLIDE - VERTICAL - LOOP - SEAMLESS - RICH SWIPING - CSS TRANSFORMS **********/
+	$('#sliderv5 .slider').prrpleSlider({
 		direction:				'vertical',
 		csstransforms:			true
+	});
+	
+	
+	/********** SLIDER V6 - MULTIPLE **********/
+	$('#sliderv6 .slider').prrpleSlider({
+		direction:				'vertical',
+		multiple:3,
+		transitionTime:250
 	});
 	
 	

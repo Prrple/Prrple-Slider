@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.5
-	UPDATED:	2016-08-31
+	VERSION:	2.6
+	UPDATED:	2016-11-29
 
 */
 
@@ -41,6 +41,7 @@
 		width:				null,				//define specific width
 		height:				null,				//define specific height
 		spacing:			0,					//spacing between slides
+		multiple:			1,					//how many slides in viewport
 		//ANIMATION
 		direction:			'horizontal',		//horizontal, vertical
 		transition:			'slide',			//fade, slide
@@ -163,7 +164,7 @@
 			
 			//INITIALISE
 			init: function(){
-				if(options.debug){console.log('init');};
+				if(options.debug){console.log('%cinit','color:#0053A0');};
 				//transforms
 				s.transforms = (options.csstransforms!=true?false:s.test_transforms());
 				//cloned
@@ -229,7 +230,7 @@
 			
 			//GET ELEMENTS
 			get_elements: function(){
-				if(options.debug){console.log('get_elements');};
+				if(options.debug){console.log('%cget_elements','color:#0053A0');};
 				s.el.slider_area = s.slider.find(options.el_slider_area);
 				s.el.slides = s.slider.find(options.el_slides);
 				s.el.slide = s.slider.find(options.el_slide);
@@ -244,14 +245,14 @@
 			
 			//GET INFO
 			get_info: function(){
-				if(options.debug){console.log('get_info');};
+				if(options.debug){console.log('%cget_info','color:#0053A0');};
 				s.total = s.slider.find(options.el_slide).length;
 			},
 			
 			
 			//UPDATE CLASS
 			update_class: function(){
-				if(options.debug){console.log('update_class');};
+				if(options.debug){console.log('%cupdate_class','color:#0053A0');};
 				//transition
 				if(options.transition == 'fade'){
 					s.slider.addClass('fade');
@@ -269,7 +270,7 @@
 			
 			//GET DIMENSIONS
 			get_dims: function(){
-				if(options.debug){console.log('get_dims');};
+				if(options.debug){console.log('%cget_dims','color:#0053A0');};
 				//reset
 				s.slider.removeAttr('style');
 				s.el.slider_area.removeAttr('style');
@@ -294,10 +295,10 @@
 						});
 					}else{
 						s.slider.find(options.el_slide).css({
-							width: s.width
+							width: (s.width / options.multiple)
 						});
 						s.el.slides.css({
-							width: (s.width * (s.total+2))
+							width: ((s.width / options.multiple) * (s.total+(2*options.multiple)))
 						});
 						if(options.direction=='vertical'){
 							s.height = 0;
@@ -326,7 +327,7 @@
 			
 			//UPDATE SIZE
 			update_size: function(){
-				if(options.debug){console.log('update_size');};
+				if(options.debug){console.log('%cupdate_size','color:#0053A0');};
 				//slider
 				if(options.width!=null){
 					s.slider.css({
@@ -352,37 +353,44 @@
 				}else{
 					if(options.direction == 'vertical'){
 						if(s.cloned==true){
-							var h = s.height * (s.total + 1);
+							var h = s.height * (s.total + (options.multiple*2));
 						}else{
 							var h = s.height * s.total;
 						};
 						s.el.slides.css({
 							width: s.width,
-							height: h
+							height: h/options.multiple
 						});
 					}else{
 						if(s.cloned==true){
-							var w = s.width * (s.total + 2);
+							var w = s.width * (s.total + (options.multiple*2));
 						}else{
 							var w = s.width * s.total;
 						};
 						s.el.slides.css({
-							width: w,
+							width: w/options.multiple,
 							height: s.height
 						});
 					};
 				};
 				//slide
-				s.el.slide.css({
-					width: s.width,
-					height: s.height
-				});
+				if(options.direction == 'vertical'){
+					s.el.slide.css({
+						width: s.width,
+						height: s.height/options.multiple
+					});
+				}else{
+					s.el.slide.css({
+						width: s.width/options.multiple,
+						height: s.height
+					});
+				}
 			},
 			
 			
 			//UPDATE VISIBILITY
 			update_visibility: function(){
-				if(options.debug){console.log('update_visibility');};
+				if(options.debug){console.log('%cupdate_visibility','color:#0053A0');};
 				if(options.transition == 'fade'){
 					s.slider.find(options.el_slide).hide();
 					s.slider.find(options.el_slide+':first').show();
@@ -390,14 +398,28 @@
 			},
 			
 			
-			//CLONE SLIDES (WHEN SEAMLESSLY LOOPING)
+			//ADD CLONED SLIDES (WHEN SEAMLESSLY LOOPING)
 			add_clones: function(){
-				if(options.debug){console.log('add_clones');};
+				if(options.debug){console.log('%cadd_clones','color:#0053A0');};
 				if(s.cloned==true && s.slider.find(options.el_slide+'.cloned').length<1){
-					var first = s.slider.find(options.el_slide).first();
-					var last = s.slider.find(options.el_slide).last();
-					first.clone().addClass('cloned').appendTo(s.el.slides);
-					last.clone().addClass('cloned cloned2').prependTo(s.el.slides);
+					//first slides
+					for(i=0;i<options.multiple;i++){
+						var n = i+1;
+						var slide = options.el_slide+':nth-child('+n+')';
+						var first = s.slider.find(slide);
+						first.clone().addClass('cloned').appendTo(s.el.slides);
+					};
+					//last slides
+					var clones2 = [];
+					for(j=0;j<options.multiple;j++){
+						var n = (s.slider.find(options.el_slide).length-options.multiple-j);
+						var slide = options.el_slide+':nth-child('+n+')';
+						var last = s.slider.find(slide);//.slice(0,1);
+						clones2.push(last);
+					};
+					for(k=0;k<clones2.length;k++){
+						clones2[k].clone().addClass('cloned cloned2').prependTo(s.el.slides);
+					}
 					s.el.slide = s.slider.find(options.el_slide);
 				};
 			},
@@ -405,7 +427,7 @@
 			
 			//ADD DOTS
 			add_dots: function(){
-				if(options.debug){console.log('add_dots');};
+				if(options.debug){console.log('%cadd_dots','color:#0053A0');};
 				if(s.total <= 1){
 					//hide dots if 1 or less slides
 					s.el.nav.hide();
@@ -429,9 +451,9 @@
 					};
 					//bind events
 					s.el.nav.find(options.el_navdot).each(function(){
-						$(this).unbind( "click" );
+						$(this).unbind('click');
 						$(this).click(function(){
-							if(options.debug){console.log('--- click dot ---');};
+							if(options.debug){console.log('%c--- click dot ---','color:#0053A0');};
 							var slideNo = parseInt($(this).attr('id').replace('slider_navdot_',''));
 							s.goTo(slideNo);
 							return false;
@@ -443,7 +465,7 @@
 			
 			//ADD ARROWS
 			add_arrows: function(){
-				if(options.debug){console.log('add_arrows');};
+				if(options.debug){console.log('%cadd_arrows','color:#0053A0');};
 				if(s.total <= 1){
 					//hide arrows if 1 or less slides
 					if(options.hideArrows == true){
@@ -471,13 +493,13 @@
 						s.el.right.removeClass('inactive');
 						//right
 						s.el.right.unbind('click').click(function(){
-							if(options.debug){console.log('--- click right ---');};
+							if(options.debug){console.log('%c--- click right ---','color:#0053A0');};
 							s.slide_right();
 							return false;
 						});
 						//left
 						s.el.left.unbind('click').click(function(){
-							if(options.debug){console.log('--- click left ---');};
+							if(options.debug){console.log('%c--- click left ---','color:#0053A0');};
 							s.slide_left();
 							return false;
 						});
@@ -488,7 +510,7 @@
 			
 			//ADD CONTROLS
 			add_controls: function(){
-				if(options.debug){console.log('add_controls');};
+				if(options.debug){console.log('%cadd_controls','color:#0053A0');};
 				if(s.total <= 1){
 					s.el.controls.hide();
 				}else{
@@ -548,7 +570,7 @@
 			
 			//HIDE RELEVANT ARROWS
 			hide_arrows: function(){
-				if(options.debug){console.log('hide_arrows');};
+				if(options.debug){console.log('%chide_arrows','color:#0053A0');};
 				if(options.loop==false && options.firstSlide==1){
 					s.el.left.addClass('inactive');
 				}else if(options.loop==false && options.firstSlide==s.total){
@@ -560,7 +582,7 @@
 			//AUTO PLAY INTERVAL
 			autoplay_int: null,
 			autoplay: function(){
-				if(options.debug){console.log('autoplay');};
+				if(options.debug){console.log('%cautoplay','color:#0053A0');};
 				if(options.autoPlay == true){
 					clearInterval(s.autoplay_int);
 					s.autoplay_int = setInterval(function(){
@@ -574,54 +596,71 @@
 			
 			//GET POSITION - SPECIFIED SLIDE
 			get_pos: function(slide,direction){
-				if(options.debug){console.log('get_pos');};
-				var l = (direction=='vertical'?s.height:s.width);
-				var total = (s.cloned==true?slide:slide-1);
+				if(options.debug){console.log('%cget_pos','color:#0053A0');};
+				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
+				if(s.cloned){
+					var total = slide + options.multiple - 1;
+				}else{
+					var total = slide-1;
+				}
 				return '-'+((total * l) + (parseInt(options.spacing) * total))+'px';
 			},
 			
 			
 			//GET POSITION - FIRST SLIDE
 			get_pos_first: function(direction){
-				if(options.debug){console.log('get_pos_first');};
-				if(s.cloned==true){
+				if(options.debug){console.log('%cget_pos_first','color:#0053A0');};
+				if(s.cloned){
 					var l = (direction=='vertical'?s.height:s.width);
-					return -(l + (parseInt(options.spacing)))+'px';
+					var total = -(l + (parseInt(options.spacing)))+'px';
 				}else{
-					return '0px';
+					var total = '0px';
 				};
+				return total;
 			},
 			
 			
 			//GET POSITION - LAST SLIDE
 			get_pos_last: function(direction){
-				if(options.debug){console.log('get_pos_last');};
-				var l = (direction=='vertical'?s.height:s.width);
-				var total = (s.cloned==true?s.total:s.total-1);
-				return parseInt('-'+((total * l) + (parseInt(options.spacing) * total)));
+				if(options.debug){console.log('%cget_pos_last','color:#0053A0');};
+				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
+				if(s.cloned){
+					var total = s.total+ options.multiple - 1;
+				}else{
+					var total = s.total-1;
+				}
+				var total2 = parseInt('-'+((total * l) + (parseInt(options.spacing) * total)));
+				return total2;
 			},
 			
 			
 			//GET POSITION - CLONED FIRST SLIDE (AT END)
 			get_pos_clone_first: function(direction){
-				if(options.debug){console.log('get_pos_clone_first');};
-				var l = (direction=='vertical'?s.height:s.width);
-				var total = (s.cloned==true?s.total:s.total-1);
-				var total2 = total+1;
-				return '-'+((total2 * l) + (parseInt(options.spacing) * total))+'px';
+				if(options.debug){console.log('%cget_pos_clone_first','color:#0053A0');};
+				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
+				var total = s.total + options.multiple;
+				var total2 = '-'+((total * l) + (parseInt(options.spacing) * (total-1)))+'px';
+				return total2;
 			},
 			
 			
 			//GET POSITION - CLONED LAST SLIDE (AT START)
 			get_pos_clone_last: function(direction){
-				if(options.debug){console.log('get_pos_clone_last');};
+				if(options.debug){console.log('%cget_pos_clone_last','color:#0053A0');};
 				return '0px';
+			},
+			
+			
+			//GET POSITION - SEAMLESS LEFT SWIPE 
+			get_pos_left_swipe: function(direction){
+				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
+				return -l * (options.multiple-1);
 			},
 			
 			
 			//SLIDE LEFT
 			slide_left: function(skip_pause,swiping){
-				if(options.debug){console.log('slide_left');};
+				if(options.debug){console.log('%cslide_left','color:#0053A0');};
 				if(s.total>1 && !s.el.left.hasClass('inactive')){
 					//go to next slide
 					if(s.current > 1){
@@ -641,7 +680,7 @@
 			
 			//SLIDE RIGHT
 			slide_right: function(skip_pause,swiping){
-				if(options.debug){console.log('slide_right');};
+				if(options.debug){console.log('%cslide_right','color:#0053A0');};
 				if(s.total>1 && !s.el.right.hasClass('inactive')){
 					//go to next slide
 					if(s.current < s.total){
@@ -664,7 +703,7 @@
 				//add
 				add: function(){
 					if(typeof($.fn.swipe)==='undefined'){
-						console.log('Please include the jQuery TouchSwipe plugin for swipe gestures.');
+						console.log('%cPlease include the jQuery TouchSwipe plugin for swipe gestures.','color:#0053A0');
 					}else{
 						if(options.richSwiping==true && options.transition=='slide'){
 							//rich swiping
@@ -727,8 +766,7 @@
 				},
 				//rich swiping
 				rich: function(event, phase, direction, distance, orientation, callback){
-					//if(options.debug){console.log('swipe rich');};
-					//if(options.debug){console.log(phase+' - '+direction+' - '+distance+' - '+orientation);};
+					if(options.debug){console.log('%c--- swipe rich - '+phase+' - '+direction+' - '+distance+' - '+orientation+' ---','color:#0053A0');};
 					if(s.total>1){
 						if(phase=='start'){
 							//reset position (for seamless swipes)
@@ -815,13 +853,13 @@
 							if(orientation=='vertical' && direction=="down" && (s.current>1 || s.cloned==true)){
 								//vertical up
 								s.slide_left(true,true);
-							}else if(orientation=='vertical' && direction=="up" && (s.current<s.total || s.cloned==true)){
+							}else if(orientation=='vertical' && direction=="up" && (s.current<(s.total-options.multiple+1) || s.cloned==true)){
 								//vertical down
 								s.slide_right(true,true);
 							}else if(orientation!='vertical' && direction=="right" && (s.current>1 || s.cloned==true)){
 								//horizontal left
 								s.slide_left(true,true);
-							}else if(orientation!='vertical' && direction=="left" && (s.current<s.total || s.cloned==true)){
+							}else if(orientation!='vertical' && direction=="left" && (s.current<(s.total-options.multiple+1) || s.cloned==true)){
 								//horizontal right
 								s.slide_right(true,true);
 							}else{
@@ -876,7 +914,7 @@
 			
 			//GO TO SLIDE
 			goTo: function(slideNo,skip,direction,swiping){
-				if(options.debug){console.log('goTo');};
+				if(options.debug){console.log('%cgoTo '+slideNo,'color:#0053A0');};
 				//time
 				if(skip==true){
 					var time = 0;
@@ -897,7 +935,8 @@
 						s.prev = 0;
 					};
 				};
-				if(s.next>s.total){
+				//if(s.next>s.total){
+				if(s.next>(s.total-options.multiple+1)){
 					if(options.loop==true){
 						s.next = 1;
 					}else{
@@ -914,7 +953,7 @@
 					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
 				}else if(options.transition == 'slide'){
 					//slide
-					if(options.debug){console.log(options.direction);};
+					if(options.debug){console.log('%c'+options.direction,'color:#0053A0');};
 					//get position
 					if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
 						//seamless slide right - animate to cloned first slide
@@ -925,7 +964,7 @@
 						var dist_reset = s.get_pos_clone_first(options.direction);
 					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
 						//seamless slide left (swiping)
-						var dist = 0;
+						var dist = s.get_pos_left_swipe(options.direction);
 					}else{
 						//general slide
 						var dist = s.get_pos(slideNo,options.direction);
@@ -1016,7 +1055,8 @@
 				}else{
 					s.el.left.removeClass('inactive');
 				};
-				if(slideNo == s.total){
+				//if(slideNo == s.total){
+				if(slideNo == (s.total-options.multiple+1)){
 					if(options.loop==false){
 						s.el.right.addClass('inactive');
 					};
@@ -1039,7 +1079,7 @@
 			
 			//REMOVE SLIDER
 			remove: function(){
-				if(options.debug){console.log('remove');};
+				if(options.debug){console.log('%cremove','color:#0053A0');};
 				//REMOVE DOTS
 				s.el.nav.html('');
 				//UNBIND EVENTS
@@ -1105,5 +1145,4 @@
 	
 	
 })(jQuery);
-
 
