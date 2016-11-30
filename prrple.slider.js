@@ -279,7 +279,8 @@
 				s.slider.find(options.el_slide).show();
 				//get width
 				if(options.width==null){
-					s.width = s.el.slider_area.innerWidth();
+					//s.width = s.el.slider_area.innerWidth();
+					s.width = s.el.slider_area.width();
 				}else{
 					s.width = options.width;
 				};
