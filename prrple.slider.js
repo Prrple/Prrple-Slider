@@ -600,7 +600,7 @@
 				if(options.debug){console.log('%cget_pos','color:#0053A0');};
 				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
 				if(s.cloned){
-					var total = slide + options.multiple - 1;
+					var total = parseInt(slide) + parseInt(options.multiple) - 1;
 				}else{
 					var total = slide-1;
 				}
