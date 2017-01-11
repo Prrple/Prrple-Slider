@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.6
-	UPDATED:	2016-11-29
+	VERSION:	2.7
+	UPDATED:	2017-01-11
 
 */
 
@@ -956,10 +956,10 @@
 					//slide
 					if(options.debug){console.log('%c'+options.direction,'color:#0053A0');};
 					//get position
-					if(s.cloned==true && s.current==1 && prev==s.total && direction!='left'){
+					if(s.cloned==true && s.current==1 && prev==s.total && direction!='left' && (s.total>2 || typeof(direction)!=='undefined')){
 						//seamless slide right - animate to cloned first slide
 						var dist = s.get_pos_clone_first(options.direction);
-					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true){
+					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true && (s.total>2 || typeof(direction)!=='undefined')){
 						//seamless slide left - reset to cloned first slide, then animate left
 						var dist = s.get_pos(slideNo,options.direction);
 						var dist_reset = s.get_pos_clone_first(options.direction);
@@ -1114,7 +1114,9 @@
 			this.resizeSlider();
 		};
 		this.goToSlide = function(goTo,skip){
-			s.goTo(goTo,skip);
+			if(goTo != s.current){
+				s.goTo(goTo,skip);
+			}
 		};
 		this.slideLeft = function(){
 			s.slide_left();
