@@ -402,6 +402,8 @@
 			//ADD CLONED SLIDES (WHEN SEAMLESSLY LOOPING)
 			add_clones: function(){
 				if(options.debug){console.log('%cadd_clones','color:#0053A0');};
+				//remove clones
+				s.slider.find(options.el_slide+'.cloned').remove();
 				if(s.cloned==true && s.slider.find(options.el_slide+'.cloned').length<1){
 					//first slides
 					for(i=0;i<options.multiple;i++){
@@ -563,6 +565,7 @@
 					s.get_dims();
 					s.update_size();
 					s.update_visibility();
+					s.add_clones();
 					//go to current
 					s.goTo(s.current,true);
 				}
