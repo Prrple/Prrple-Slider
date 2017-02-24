@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.8
-	UPDATED:	2017-02-20
+	VERSION:	2.9
+	UPDATED:	2017-02-24
 
 */
 
@@ -404,7 +404,7 @@
 				if(options.debug){console.log('%cadd_clones','color:#0053A0');};
 				//remove clones
 				s.slider.find(options.el_slide+'.cloned').remove();
-				if(s.cloned==true && s.slider.find(options.el_slide+'.cloned').length<1){
+				if(s.cloned==true && s.slider.find(options.el_slide+'.cloned').length<1 && s.total>1){
 					//first slides
 					for(i=0;i<options.multiple;i++){
 						var n = i+1;
@@ -602,7 +602,7 @@
 			get_pos: function(slide,direction){
 				if(options.debug){console.log('%cget_pos','color:#0053A0');};
 				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
-				if(s.cloned){
+				if(s.cloned && s.total>1){
 					var total = parseInt(slide) + parseInt(options.multiple) - 1;
 				}else{
 					var total = slide-1;
@@ -614,7 +614,7 @@
 			//GET POSITION - FIRST SLIDE
 			get_pos_first: function(direction){
 				if(options.debug){console.log('%cget_pos_first','color:#0053A0');};
-				if(s.cloned){
+				if(s.cloned && s.total>1){
 					var l = (direction=='vertical'?s.height:s.width);
 					var total = -(l + (parseInt(options.spacing)))+'px';
 				}else{
@@ -628,7 +628,7 @@
 			get_pos_last: function(direction){
 				if(options.debug){console.log('%cget_pos_last','color:#0053A0');};
 				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
-				if(s.cloned){
+				if(s.cloned && s.total>1){
 					var total = s.total+ options.multiple - 1;
 				}else{
 					var total = s.total-1;
