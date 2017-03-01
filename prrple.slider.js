@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.9
-	UPDATED:	2017-02-24
+	VERSION:	2.10
+	UPDATED:	2017-03-01
 
 */
 
@@ -57,7 +57,8 @@
 		pauseOnClick:		true,				//pause slider after interacting?
 		//MISC
 		windowsize:			true,				//resize slider on browser resize
-		addElements:		true,				//if arrows don't exist, dynamically add them
+		addArrows:			true,				//if arrows don't exist, dynamically add them
+		addDots:			true,				//if dots don't exist, dynamically add them
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
 		textDots:			false,				//add test to dots (using data-nav attribute)
 		firstSlide:			1,					//the slide number to start on
@@ -436,7 +437,7 @@
 					s.el.nav.hide();
 				}else{
 					//add dot wrapper if doesn't exist
-					if(options.addElements){
+					if(options.addDots){
 						if(s.el.nav.length<1){
 							s.slider.append('<div class="'+(options.el_nav.replace('.',''))+'"></div>');
 						};
@@ -477,7 +478,7 @@
 					};
 				}else{
 					//add arrows if they don't exists
-					if(options.addElements){
+					if(options.addArrows){
 						if(s.el.left.length<1){
 							s.slider.append('<a class="'+(options.el_left.replace('.',''))+'">Prev</a>');
 						};
