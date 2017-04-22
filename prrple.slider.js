@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.10
-	UPDATED:	2017-03-01
+	VERSION:	2.11
+	UPDATED:	2017-04-22
 
 */
 
@@ -161,6 +161,8 @@
 			paused: false,			//is animation paused?
 			transforms: false,		//are css transforms enabled?
 			cloned: false,			//are there cloned slides? (seamless looping)
+			t1: null,				//timeouts
+			t2: null,
 			
 			
 			//INITIALISE
@@ -550,6 +552,7 @@
 				},
 				//remove
 				remove: function(){
+					clearTimeout(s.resize.t);
 					$(window).off("resize",s.resize.delay);
 				},
 				//delay
@@ -1044,7 +1047,7 @@
 				s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current');
 				s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev');
 				s.slider.find(options.el_slide+':nth-child('+(s.next+(s.cloned==true?1:0))+')').addClass('next');
-				setTimeout(function(){
+				s.t1 = setTimeout(function(){
 					s.slider.find(options.el_slide).removeClass('current2 prev2 next2');
 					s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current2');
 					s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev2');
@@ -1074,7 +1077,7 @@
 				if(typeof(options.callback)==='function'){
 					options.callback(slideNo,s.total);
 				};
-				setTimeout(function(){
+				s.t2 = setTimeout(function(){
 					if(typeof(options.callback_end)==='function'){
 						options.callback_end(slideNo,s.total);
 					};
@@ -1085,23 +1088,40 @@
 			//REMOVE SLIDER
 			remove: function(){
 				if(options.debug){console.log('%cremove','color:#0053A0');};
-				//REMOVE DOTS
-				s.el.nav.html('');
-				//UNBIND EVENTS
-				s.el.left.unbind();
-				s.el.right.unbind();
-				s.slider.find('*').stop(true,true).unbind().off();
-				//CLEAR INTERVAL
-				clearInterval(s.autoplay_int);
-				//REMOVE CLONE
-				s.slider.find(options.el_slide+'.cloned').remove();
-				//REMOVE CSS
-				s.slider.find('*').removeAttr('style');
-				s.slider.removeClass('slider_init fade slide');
-				//REMOVE RESIZE DETECTION
+				// remove resize detection
 				s.resize.remove();
-				//REMOVE TOUCHSWIPE
+				// remove touchswipe
 				s.swipe.remove();
+				// clear timers & intervals
+				clearTimeout(s.t1);
+				clearTimeout(s.t2);
+				clearTimeout(s.resize.t);
+				clearInterval(s.autoplay_int);
+				// remove dynamic elements
+				if(options.addArrows){
+					s.el.left.remove();
+					s.el.right.remove();
+				};
+				if(options.addDots){
+					s.el.nav.remove();
+				}else{
+					s.el.nav.html('');
+				};
+				// remove clones
+				s.slider.find(options.el_slide+'.cloned').remove();
+				// remove events and css from elements
+				s.el.slider_area.stop(true,true).removeAttr('style').unbind().off();
+				s.el.slides.stop(true,true).removeAttr('style').unbind().off();
+				s.el.slide.stop(true,true).removeAttr('style').unbind().off();
+				s.el.left.stop(true,true).removeAttr('style').unbind().off();
+				s.el.right.stop(true,true).removeAttr('style').unbind().off();
+				s.el.nav.stop(true,true).removeAttr('style').unbind().off();
+				s.el.controls.stop(true,true).removeAttr('style').unbind().off();
+				s.el.play.stop(true,true).removeAttr('style').unbind().off();
+				s.el.pause.stop(true,true).removeAttr('style').unbind().off();
+				// remove classes
+				s.slider.removeClass('slider_init fade slide');
+				s.slider.find(options.el_slide).removeClass('current current2 next next2 prev prev2');
 			}
 			
 			
