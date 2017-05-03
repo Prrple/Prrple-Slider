@@ -50,29 +50,38 @@ $('#mySlider').prrpleSlider({
 There are several methods you can call on an initiated slider.
 
 **$('#mySlider').prrpleSliderUpdate(options);**
+
 Update the slider by passing in new options.
 
 **$('#mySlider').prrpleSliderGoTo(goTo,skip);**
+
 Go to a specific slide. You can also pass skip=true to skip the animation.
 
 **$('#mySlider').prrpleSliderLeft();**
+
 Slide to the left.
 
 **$('#mySlider').prrpleSliderRight();**
+
 Slide to the right.
 
 **$('#mySlider').prrpleSliderPause();**
+
 Pause an autoplaying slider.
 
 **$('#mySlider').prrpleSliderPlay();**
+
 Start autoplaying the slider.
 
 **$('#mySlider').prrpleSliderResize();**
+
 Trigger a slider resize. In the latest versions, this should happen automatically, but you may still want to use this at other times.
 
 **$('#mySlider').prrpleSliderRemove();**
+
 Completely removes the slider, all bound events and classes, and restores your HTML back to the way it was (hopefully).
 
 **$('#mySlider').prrpleSliderGetCurrent();**
+
 Returns the current slide number.
 
