@@ -34,6 +34,25 @@ body{
 		text-size-adjust:none;
 	}
 }
+.github{
+	display:block;
+	position:fixed;
+	width:140px;
+	height:140px;
+	top:0;
+	right:0;
+	background:url(../images/github.png);
+	background-repeat:no-repeat;
+	font-size:0;
+	line-height:0;
+	text-indent:-9999px;
+}
+@media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
+	.github{
+		background-image:url(../images/github@2x.png);
+		background-size:140px 140px;
+	}
+}
 
 
 
