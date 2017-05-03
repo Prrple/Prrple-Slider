@@ -8,7 +8,7 @@ Prrple Slider is a lightweight jQuery slider, first built partly as a learning e
 
 Include prrple.slider.js and prrple.slider.css in your document (found in the "src" folder of the repo). You'll also need jQuery, and if you want touch functionality, you'll need the [TouchSwipe plugin](https://github.com/mattbryson/TouchSwipe-Jquery-Plugin).
 
-Then, include the necessary HTML markup. In the latest versions, navigation arrows and dots are automatically generated, but you use the options to disable this auto-generation and place these in the markup wherever you want (within the .slider div).
+Then, include the necessary HTML markup. In the latest versions, navigation arrows and dots are automatically generated, but you can use the options to disable this auto-generation and place these in the markup wherever you want within the .slider element.
 ```html
 <div id="mySlider" class="slider">
 	<div class="slider_area">
@@ -30,7 +30,7 @@ Then, include the necessary HTML markup. In the latest versions, navigation arro
 </div>
 ```
 
-Finally, initiate the slider with javascript.
+Then, initiate the slider with javascript.
 ```js
 $('#mySlider').prrpleSlider();
 ```
@@ -47,32 +47,59 @@ $('#mySlider').prrpleSlider({
 
 ## Methods
 
-There are several methods you can call on an initiated slider.
+There are several methods you can use on an initiated slider...
 
-#### $('#mySlider').prrpleSliderUpdate(options);
+#### Update
 Update the slider by passing in new options.
+```js
+$('#mySlider').prrpleSliderUpdate(options);
+```
 
-#### $('#mySlider').prrpleSliderGoTo(goTo,skip);
+#### GoTo
+```js
+$('#mySlider').prrpleSliderGoTo(goTo,skip);
+```
 Go to a specific slide. You can also pass skip=true to skip the animation.
 
-#### $('#mySlider').prrpleSliderLeft();
+#### Left
 Slide to the left.
+```js
+$('#mySlider').prrpleSliderLeft();
+```
 
-#### $('#mySlider').prrpleSliderRight();
+#### Right
 Slide to the right.
+```js
+$('#mySlider').prrpleSliderRight();
+```
 
-#### $('#mySlider').prrpleSliderPause();
+#### Pause
 Pause an autoplaying slider.
+```js
+$('#mySlider').prrpleSliderPause();
+```
 
-#### $('#mySlider').prrpleSliderPlay();
+#### Play
 Start autoplaying the slider.
+```js
+$('#mySlider').prrpleSliderPlay();
+```
 
-#### $('#mySlider').prrpleSliderResize();
-Trigger a slider resize. In the latest versions, this should happen automatically, but you may still want to use this at other times.
+#### Resize
+Trigger a slider resize. In the latest versions, this should happen automatically on browser window resize, but it's here in case you need to use it at other times.
+```js
+$('#mySlider').prrpleSliderResize();
+```
 
-#### $('#mySlider').prrpleSliderRemove();
-Completely removes the slider, all bound events and classes, and restores your HTML back to the way it was (hopefully).
-
-#### $('#mySlider').prrpleSliderGetCurrent();
+#### GetCurrent
 Returns the current slide number.
+```js
+$('#mySlider').prrpleSliderGetCurrent();
+```
+
+#### Remove
+Completely removes the slider, all bound events and classes, and restores your HTML back to the way it was (hopefully).
+```js
+$('#mySlider').prrpleSliderRemove();
+```
 
