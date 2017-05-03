@@ -70,6 +70,7 @@
 	/******************** NEW SLIDER ********************/
 	$.fn.prrpleSlider = function(params){
 		var options = $.extend({}, $.prrpleSliderConfig, params);
+		options.id = ($(this).attr('id')?$(this).attr('id'):'');
 		this.each(function(){
 			//remove previous slider
 			try{
@@ -167,7 +168,7 @@
 			
 			//INITIALISE
 			init: function(){
-				if(options.debug){console.log('%cinit','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' init','color:#0053A0');};
 				//transforms
 				s.transforms = (options.csstransforms!=true?false:s.test_transforms());
 				//cloned
@@ -233,7 +234,7 @@
 			
 			//GET ELEMENTS
 			get_elements: function(){
-				if(options.debug){console.log('%cget_elements','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_elements','color:#0053A0');};
 				s.el.slider_area = s.slider.find(options.el_slider_area);
 				s.el.slides = s.slider.find(options.el_slides);
 				s.el.slide = s.slider.find(options.el_slide);
@@ -248,14 +249,14 @@
 			
 			//GET INFO
 			get_info: function(){
-				if(options.debug){console.log('%cget_info','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_info','color:#0053A0');};
 				s.total = s.slider.find(options.el_slide).length;
 			},
 			
 			
 			//UPDATE CLASS
 			update_class: function(){
-				if(options.debug){console.log('%cupdate_class','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' update_class','color:#0053A0');};
 				//transition
 				if(options.transition == 'fade'){
 					s.slider.addClass('fade');
@@ -273,7 +274,7 @@
 			
 			//GET DIMENSIONS
 			get_dims: function(){
-				if(options.debug){console.log('%cget_dims','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_dims','color:#0053A0');};
 				//reset
 				s.slider.removeAttr('style');
 				s.el.slider_area.removeAttr('style');
@@ -331,7 +332,7 @@
 			
 			//UPDATE SIZE
 			update_size: function(){
-				if(options.debug){console.log('%cupdate_size','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' update_size','color:#0053A0');};
 				//slider
 				if(options.width!=null){
 					s.slider.css({
@@ -394,7 +395,7 @@
 			
 			//UPDATE VISIBILITY
 			update_visibility: function(){
-				if(options.debug){console.log('%cupdate_visibility','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' update_visibility','color:#0053A0');};
 				if(options.transition == 'fade'){
 					s.slider.find(options.el_slide).hide();
 					s.slider.find(options.el_slide+':first').show();
@@ -404,7 +405,7 @@
 			
 			//ADD CLONED SLIDES (WHEN SEAMLESSLY LOOPING)
 			add_clones: function(){
-				if(options.debug){console.log('%cadd_clones','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' add_clones','color:#0053A0');};
 				//remove clones
 				s.slider.find(options.el_slide+'.cloned').remove();
 				if(s.cloned==true && s.slider.find(options.el_slide+'.cloned').length<1 && s.total>1){
@@ -433,7 +434,7 @@
 			
 			//ADD DOTS
 			add_dots: function(){
-				if(options.debug){console.log('%cadd_dots','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' add_dots','color:#0053A0');};
 				if(s.total <= 1){
 					//hide dots if 1 or less slides
 					s.el.nav.hide();
@@ -471,7 +472,7 @@
 			
 			//ADD ARROWS
 			add_arrows: function(){
-				if(options.debug){console.log('%cadd_arrows','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' add_arrows','color:#0053A0');};
 				if(s.total <= 1){
 					//hide arrows if 1 or less slides
 					if(options.hideArrows == true){
@@ -516,7 +517,7 @@
 			
 			//ADD CONTROLS
 			add_controls: function(){
-				if(options.debug){console.log('%cadd_controls','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' add_controls','color:#0053A0');};
 				if(s.total <= 1){
 					s.el.controls.hide();
 				}else{
@@ -578,7 +579,7 @@
 			
 			//HIDE RELEVANT ARROWS
 			hide_arrows: function(){
-				if(options.debug){console.log('%chide_arrows','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' hide_arrows','color:#0053A0');};
 				if(options.loop==false && options.firstSlide==1){
 					s.el.left.addClass('inactive');
 				}else if(options.loop==false && options.firstSlide==s.total){
@@ -590,7 +591,7 @@
 			//AUTO PLAY INTERVAL
 			autoplay_int: null,
 			autoplay: function(){
-				if(options.debug){console.log('%cautoplay','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' autoplay','color:#0053A0');};
 				if(options.autoPlay == true){
 					clearInterval(s.autoplay_int);
 					s.autoplay_int = setInterval(function(){
@@ -604,7 +605,7 @@
 			
 			//GET POSITION - SPECIFIED SLIDE
 			get_pos: function(slide,direction){
-				if(options.debug){console.log('%cget_pos','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_pos','color:#0053A0');};
 				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
 				if(s.cloned && s.total>1){
 					var total = parseInt(slide) + parseInt(options.multiple) - 1;
@@ -617,7 +618,7 @@
 			
 			//GET POSITION - FIRST SLIDE
 			get_pos_first: function(direction){
-				if(options.debug){console.log('%cget_pos_first','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_pos_first','color:#0053A0');};
 				if(s.cloned && s.total>1){
 					var l = (direction=='vertical'?s.height:s.width);
 					var total = -(l + (parseInt(options.spacing)))+'px';
@@ -630,7 +631,7 @@
 			
 			//GET POSITION - LAST SLIDE
 			get_pos_last: function(direction){
-				if(options.debug){console.log('%cget_pos_last','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_pos_last','color:#0053A0');};
 				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
 				if(s.cloned && s.total>1){
 					var total = s.total+ options.multiple - 1;
@@ -644,7 +645,7 @@
 			
 			//GET POSITION - CLONED FIRST SLIDE (AT END)
 			get_pos_clone_first: function(direction){
-				if(options.debug){console.log('%cget_pos_clone_first','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_pos_clone_first','color:#0053A0');};
 				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
 				var total = s.total + options.multiple;
 				var total2 = '-'+((total * l) + (parseInt(options.spacing) * (total-1)))+'px';
@@ -654,7 +655,7 @@
 			
 			//GET POSITION - CLONED LAST SLIDE (AT START)
 			get_pos_clone_last: function(direction){
-				if(options.debug){console.log('%cget_pos_clone_last','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' get_pos_clone_last','color:#0053A0');};
 				return '0px';
 			},
 			
@@ -668,7 +669,7 @@
 			
 			//SLIDE LEFT
 			slide_left: function(skip_pause,swiping){
-				if(options.debug){console.log('%cslide_left','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' slide_left','color:#0053A0');};
 				if(s.total>1 && !s.el.left.hasClass('inactive')){
 					//go to next slide
 					if(s.current > 1){
@@ -688,7 +689,7 @@
 			
 			//SLIDE RIGHT
 			slide_right: function(skip_pause,swiping){
-				if(options.debug){console.log('%cslide_right','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' slide_right','color:#0053A0');};
 				if(s.total>1 && !s.el.right.hasClass('inactive')){
 					//go to next slide
 					if(s.current < s.total){
@@ -922,7 +923,7 @@
 			
 			//GO TO SLIDE
 			goTo: function(slideNo,skip,direction,swiping){
-				if(options.debug){console.log('%cgoTo '+slideNo,'color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' goTo '+slideNo,'color:#0053A0');};
 				//time
 				if(skip==true){
 					var time = 0;
@@ -961,7 +962,7 @@
 					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
 				}else if(options.transition == 'slide'){
 					//slide
-					if(options.debug){console.log('%c'+options.direction,'color:#0053A0');};
+					if(options.debug){console.log('%c'+options.id+' '+options.direction,'color:#0053A0');};
 					//get position
 					if(s.cloned==true && s.current==1 && prev==s.total && direction!='left' && (s.total>2 || typeof(direction)!=='undefined')){
 						//seamless slide right - animate to cloned first slide
@@ -1087,7 +1088,7 @@
 			
 			//REMOVE SLIDER
 			remove: function(){
-				if(options.debug){console.log('%cremove','color:#0053A0');};
+				if(options.debug){console.log('%c'+options.id+' remove slider','color:#0053A0');};
 				// remove resize detection
 				s.resize.remove();
 				// remove touchswipe
