@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.11
-	UPDATED:	2017-04-22
+	VERSION:	2.12
+	UPDATED:	2017-05-03
 
 */
 
@@ -407,7 +407,7 @@
 			add_clones: function(){
 				if(options.debug){console.log('%c'+options.id+' add_clones','color:#0053A0');};
 				//remove clones
-				s.slider.find(options.el_slide+'.cloned').remove();
+				//s.slider.find(options.el_slide+'.cloned').remove();
 				if(s.cloned==true && s.slider.find(options.el_slide+'.cloned').length<1 && s.total>1){
 					//first slides
 					for(i=0;i<options.multiple;i++){
