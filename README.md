@@ -38,7 +38,7 @@ $('#mySlider').prrpleSlider();
 You can pass in any options when initiating. For a full list of up-to-date options, and their default values, check inside the latest prrple.slider.js file.
 ```js
 $('#mySlider').prrpleSlider({
-    transition: 'slide',
+	transition: 'slide',
 	transitionTime: 500,
 	autoPlay: true,
 	callback: function(){}
@@ -49,7 +49,7 @@ $('#mySlider').prrpleSlider({
 
 There are several methods you can call on an initiated slider.
 
-**$('#mySlider').prrpleSliderUpdate(options);**
+> $('#mySlider').prrpleSliderUpdate(options);
 
 Update the slider by passing in new options.
 
