@@ -353,6 +353,21 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 	text-align:center;
 	color:rgba(0,0,0,0.1);
 }
+@media (max-width:600px){
+	.slidetitle{
+		font-size:120px;
+	}
+}
+@media (max-width:500px){
+	.slidetitle{
+		font-size:100px;
+	}
+}
+@media (max-width:374px){
+	.slidetitle{
+		font-size:80px;
+	}
+}
 
 
 /*.slide.current .slidetitle{
