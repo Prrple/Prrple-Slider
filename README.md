@@ -56,10 +56,10 @@ $('#mySlider').prrpleSliderUpdate(options);
 ```
 
 #### GoTo
+Go to a specific slide. You can also pass skip=true to skip the animation.
 ```js
 $('#mySlider').prrpleSliderGoTo(goTo,skip);
 ```
-Go to a specific slide. You can also pass skip=true to skip the animation.
 
 #### Left
 Slide to the left.
