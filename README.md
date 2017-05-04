@@ -1,5 +1,7 @@
 # Prrple Slider
 
+[By Alex Bimpson @ Prrple](http://www.prrple.com)
+
 [View online examples](http://code.prrple.com/slider/)
 
 Prrple Slider is a lightweight jQuery slider, first built partly as a learning excercise, and partly to enable tapping into desired features that weren't easily accessible from other open source sliders at the time. Initially intended only for bespoke internal projects, in 2015 an open source repo was finally started, and the slider has evolved and matured since then.
