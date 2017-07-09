@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.12
-	UPDATED:	2017-05-03
+	VERSION:	2.13
+	UPDATED:	2017-07-09
 
 */
 
@@ -50,7 +50,7 @@
 		loop:				true,				//whether or not to infinitely loop the slider
 		loopSeamless:		true,				//whether or not a looping slider should seamlessly rotate
 		richSwiping:		true,				//use rich swiping?
-		csstransforms:		false,				//use css transforms?
+		csstransforms:		true,				//use css transforms?
 		//AUTOPLAY
 		autoPlay:			false,				//play slider automatically?
 		autoPlayInterval:	4000,				//how often to automatically switch between slides
@@ -877,6 +877,9 @@
 							};
 							//callback
 							if(c!=false){
+								if(options.pauseOnClick==true){
+									s.paused = true;
+								};
 								if(typeof(callback) == "function"){
 									callback(s.current,s.total,phase,direction,distance);
 								};
