@@ -6,9 +6,9 @@
 	AUTHOR:		Alex Bimpson
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
-	REQUIRES:	jQuery, jQuery Easing, jQuery TouchSwipe
-	VERSION:	2.13
-	UPDATED:	2017-07-09
+	REQUIRES:	jQuery, jQuery TouchSwipe (optional)
+	VERSION:	2.14
+	UPDATED:	2017-08-03
 
 */
 
@@ -771,7 +771,7 @@
 				},
 				//remove
 				remove: function(){
-					
+					s.slider.swipe('destroy');
 				},
 				//rich swiping
 				rich: function(event, phase, direction, distance, orientation, callback){
