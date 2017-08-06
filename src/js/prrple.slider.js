@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe (optional)
-	VERSION:	2.14
-	UPDATED:	2017-08-03
+	VERSION:	2.15
+	UPDATED:	2017-08-06
 
 */
 
@@ -32,8 +32,8 @@
 		el_slide:			'.slide',			//define slide elements
 		el_left:			'.slider_left',		//define left arrow element
 		el_right:			'.slider_right',	//define right arrow element
-		el_nav:				'.slider_nav',		//define nav dot wrapper
-		el_navdot:			'.slider_navdot',	//define nav dots
+		el_dotwrap:			'.slider_dotwrap',	//define nav dot wrapper
+		el_dot:				'.slider_dot',		//define nav dots
 		el_controls:		'.slider_controls',	//define arrow wrapper
 		el_play:			'.slider_play',		//define play button
 		el_pause:			'.slider_pause',	//define pause button
@@ -60,7 +60,7 @@
 		addArrows:			true,				//if arrows don't exist, dynamically add them
 		addDots:			true,				//if dots don't exist, dynamically add them
 		hideArrows:			true,				//whether to hide arrows if there's only one slide e.g. for dynamically loaded content
-		textDots:			false,				//add test to dots (using data-nav attribute)
+		textDots:			false,				//add text to dots (using data-nav attribute)
 		firstSlide:			1,					//the slide number to start on
 		callback:			null,				//callback function after a slide changes
 		callback_end:		null				//callback function after a slide changes and animation completes
@@ -240,7 +240,7 @@
 				s.el.slide = s.slider.find(options.el_slide);
 				s.el.left = s.slider.find(options.el_left);
 				s.el.right = s.slider.find(options.el_right);
-				s.el.nav = s.slider.find(options.el_nav);
+				s.el.nav = s.slider.find(options.el_dotwrap);
 				s.el.controls = s.slider.find(options.el_controls);
 				s.el.play = s.slider.find(options.el_play);
 				s.el.pause = s.slider.find(options.el_pause);
@@ -442,9 +442,9 @@
 					//add dot wrapper if doesn't exist
 					if(options.addDots){
 						if(s.el.nav.length<1){
-							s.slider.append('<div class="'+(options.el_nav.replace('.',''))+'"></div>');
+							s.slider.append('<div class="'+(options.el_dotwrap.replace('.',''))+'"></div>');
 						};
-						s.el.nav = s.slider.find(options.el_nav);
+						s.el.nav = s.slider.find(options.el_dotwrap);
 					};
 					//create dots
 					s.el.nav.html('');
@@ -454,14 +454,14 @@
 						}else{
 							var t = i;
 						};
-						s.el.nav.append('<a class="slider_navdot '+(i==1?'current':'')+'" id="slider_navdot_'+i+'" >'+t+'</a>');
+						s.el.nav.append('<a class="'+(options.el_dot.replace('.',''))+' '+(i==1?'current':'')+'" id="'+(options.el_dot.replace('.',''))+'_'+i+'" >'+t+'</a>');
 					};
 					//bind events
-					s.el.nav.find(options.el_navdot).each(function(){
+					s.el.nav.find(options.el_dot).each(function(){
 						$(this).unbind('click');
 						$(this).click(function(){
 							if(options.debug){console.log('%c--- click dot ---','color:#0053A0');};
-							var slideNo = parseInt($(this).attr('id').replace('slider_navdot_',''));
+							var slideNo = parseInt($(this).attr('id').replace((options.el_dot.replace('.',''))+'_',''));
 							s.goTo(slideNo);
 							return false;
 						});
@@ -956,8 +956,8 @@
 					};
 				};
 				//update nav
-				s.el.nav.find(options.el_navdot).removeClass('current');
-				s.el.nav.find('#slider_navdot_'+slideNo).addClass('current');
+				s.el.nav.find(options.el_dot).removeClass('current');
+				s.el.nav.find('#'+(options.el_dot.replace('.',''))+'_'+slideNo).addClass('current');
 				//animate slider
 				if(options.transition == 'fade'){
 					//fade
