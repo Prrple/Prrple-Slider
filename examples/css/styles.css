@@ -2,11 +2,17 @@
 
 
 /********** MAIN **********/
+html{
+	height:100%;
+}
 body{
+	position:relative;
+	min-height:100%;
+	padding:0 20px 260px;
 	background:#fafaf9;
 	font-family:Helvetica, Arial, sans-serif;
-	font-size:13px;
-	line-height:17px;
+	font-size:14px;
+	line-height:19px;
 	font-weight:lighter;
 	color:#333;
 }
@@ -16,6 +22,7 @@ body{
 	border: 0;
 	outline:none;
 	filter:inherit;
+	box-sizing:border-box;
 }
 .clearme{
 	clear:both;
@@ -46,6 +53,7 @@ body{
 	font-size:0;
 	line-height:0;
 	text-indent:-9999px;
+	z-index:10;
 }
 @media (-webkit-min-device-pixel-ratio: 2), (min-device-pixel-ratio: 2) {
 	.github{
@@ -53,21 +61,26 @@ body{
 		background-size:140px 140px;
 	}
 }
+@media (max-width:1260px){
+	.github{
+		display:none;
+	}
+}
 
 
 
 
 /********** FONTS **********/
-h1{
+h2{
 	font-size:26px;
 	line-height:33px;
-	margin:0 0 22px;
+	margin:0 0 2px;
 	font-weight:lighter;
 }
-h2{
-	font-size:23px;
-	line-height:28px;
-	margin:0 0 17px;
+h3{
+	font-size:18px;
+	line-height:24px;
+	margin:0 0 22px;
 	font-weight:lighter;
 }
 h2 span{
@@ -83,6 +96,9 @@ h4{
 
 p+p{
 	margin-top:10px;
+}
+.slider + p{
+	margin-top:40px;
 }
 
 a{
@@ -162,7 +178,6 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 	position:relative;
 	height:115px;
 	margin:0 auto 38px;
-	padding:0 20px;
 }
 #header_inner{
 	position:relative;
@@ -187,7 +202,7 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 #header_nav{
 	display:block;
 	position:absolute;
-	top:47px;
+	top:46px;
 	right:0;
 	list-style:none;
 	text-align:right;
@@ -229,13 +244,36 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 	z-index:10;
 }
 
+@media (max-width:413px){
+	#header,
+	#header_inner{
+		height:110px;
+	}
+	#header h1.title{
+		font-size:26px;
+		line-height:26px;
+	}
+	#header_nav{
+		top:44px;
+	}
+	#header_nav li{
+		font-size:14px;
+		line-height:14px;
+	}
+	#header_nav li a{
+		padding:6px 12px 5px;
+		margin-left:6px;
+	}
+}
 
 
 /********** FOOTER **********/
 #footer{
 	display:block;
-	position:relative;
-	margin:80px auto 0;
+	position:absolute;
+	width:100%;
+	bottom:0;
+	left:0;
 	padding:40px 0;
 	background:#333;
 	color:#FFF;
@@ -322,7 +360,6 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 	position:relative;
 	max-width:940px;
 	margin:0 auto;
-	padding:0 20px;
 }
 .container{
 	position:relative;
@@ -338,6 +375,8 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 
 
 /********** SLIDERS **********/
+
+/* slide numbers */
 .slidetitle{
 	font-size:150px;
 	line-height:280px;
@@ -361,7 +400,6 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 	}
 }
 
-
 /*.slide.current .slidetitle{
 	color:#f00;
 }
@@ -373,17 +411,7 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 }*/
 
 
-#sliderv6 .slidetitle{
-	font-size:70px;
-	line-height:100px;
-}
-
-
-
-
-
-
-
+/* vertical slider styling */
 .slider.vertical .slider_left,
 .slider.vertical .slider_right{
 	width:100px;
@@ -408,6 +436,26 @@ input[type="button"], input[type="submit"], input[type="reset"]{
 .slider.vertical .slider_dot{
 	margin:4px 0;
 }
+
+
+/* overrides */
+#slider0 .slider{
+	height:400px;
+}
+#slider0 .slidetitle{
+	line-height:380px;
+}
+#sliderv6 .slidetitle{
+	font-size:70px;
+	line-height:100px;
+}
+
+
+
+
+
+
+
 
 
 
