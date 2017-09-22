@@ -7,8 +7,8 @@
 	NAME:		Prrple Slider
 	WEB:		www.prrple.com
 	REQUIRES:	jQuery, jQuery TouchSwipe (optional)
-	VERSION:	2.16
-	UPDATED:	2017-09-20
+	VERSION:	2.17
+	UPDATED:	2017-09-22
 
 */
 
