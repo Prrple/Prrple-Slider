@@ -796,15 +796,17 @@
 						};
 						//vertical - animate
 						if(s.transforms){
-							if(skip==true){
-								s.el.slides.stop(true,true).removeClass('animate');
-							}else{
-								s.el.slides.stop(true,true).addClass('animate');
-							};
-							s.el.slides.stop(true,true).css({
-								'-webkit-transform': 'translateY('+dist+')',
-								'transform': 'translateY('+dist+')'
-							});
+							setTimeout(function(){ // brief timeout avoids css animating reset
+								if(skip==true){
+									s.el.slides.stop(true,true).removeClass('animate');
+								}else{
+									s.el.slides.stop(true,true).addClass('animate');
+								};
+								s.el.slides.stop(true,true).css({
+									'-webkit-transform': 'translateY('+dist+')',
+									'transform': 'translateY('+dist+')'
+								});
+							},5);
 						}else{
 							s.el.slides.stop(true,true).animate({
 								top:dist
@@ -818,6 +820,7 @@
 									'-webkit-transform': 'translateX('+dist_reset+')',
 									'transform': 'translateX('+dist_reset+')'
 								});
+								timeout = 0;
 							}else{
 								s.el.slides.stop(true,true).css({
 									left:dist_reset
@@ -826,15 +829,17 @@
 						};
 						//horizontal - animate
 						if(s.transforms){
-							if(skip==true){
-								s.el.slides.stop(true,true).removeClass('animate');
-							}else{
-								s.el.slides.stop(true,true).addClass('animate');
-							};
-							s.el.slides.stop(true,true).css({
-								'-webkit-transform': 'translateX('+dist+')',
-								'transform': 'translateX('+dist+')'
-							});
+							setTimeout(function(){ // brief timeout avoids css animating reset
+								if(skip==true){
+									s.el.slides.stop(true,true).removeClass('animate');
+								}else{
+									s.el.slides.stop(true,true).addClass('animate');
+								};
+								s.el.slides.stop(true,true).css({
+									'-webkit-transform': 'translateX('+dist+')',
+									'transform': 'translateX('+dist+')'
+								});
+							},5);
 						}else{
 							s.el.slides.stop(true,true).animate({
 								left:dist
