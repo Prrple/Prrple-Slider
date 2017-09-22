@@ -673,7 +673,7 @@
 			//GET POSITION - SEAMLESS LEFT SWIPE 
 			get_pos_left_swipe: function(direction){
 				var l = (direction=='vertical'?s.height:s.width) / options.multiple;
-				return -l * (options.multiple-1);
+				return '-' + (l * (options.multiple-1)) + 'px';
 			},
 			
 			
