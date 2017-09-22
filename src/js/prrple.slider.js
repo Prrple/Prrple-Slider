@@ -717,6 +717,174 @@
 			},
 			
 			
+			//GO TO SLIDE
+			goTo: function(slideNo,skip,direction,swiping){
+				if(options.debug) console.log('%c'+options.id+' goTo '+slideNo,'color:#0053A0');
+				//time
+				var time;
+				if(skip==true){
+					time = 0;
+				}else{
+					time = options.transitionTime;
+				};
+				//store previous
+				var prev = s.current;
+				//save
+				var xprev = parseInt(slideNo-1);
+				s.current = parseInt(slideNo);
+				s.prev = parseInt(slideNo-1);
+				s.next = parseInt(slideNo+1);
+				if(s.prev<1){
+					if(options.loop==true){
+						s.prev = s.total;
+					}else{
+						s.prev = 0;
+					};
+				};
+				//if(s.next>s.total){
+				if(s.next>(s.total-options.multiple+1)){
+					if(options.loop==true){
+						s.next = 1;
+					}else{
+						s.next = 0;
+					};
+				};
+				//update nav
+				s.el.nav.find(options.el_dot).removeClass('current');
+				s.el.nav.find('#'+(options.el_dot.replace('.',''))+'_'+slideNo).addClass('current');
+				//animate slider
+				if(options.transition == 'fade'){
+					//fade
+					s.slider.find(options.el_slide).fadeOut(time);
+					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
+				}else if(options.transition == 'slide'){
+					//slide
+					if(options.debug) console.log('%c'+options.id+' '+options.direction,'color:#0053A0');
+					//get position
+					var dist;
+					var dist_reset;
+					if(s.cloned==true && s.current==1 && prev==s.total && direction!='left' && (s.total>2 || typeof(direction)!=='undefined')){
+						//seamless slide right - animate to cloned first slide
+						dist = s.get_pos_clone_first(options.direction);
+					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true && (s.total>2 || typeof(direction)!=='undefined')){
+						//seamless slide left - reset to cloned first slide, then animate left
+						dist = s.get_pos(slideNo,options.direction);
+						dist_reset = s.get_pos_clone_first(options.direction);
+					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
+						//seamless slide left (swiping)
+						dist = s.get_pos_left_swipe(options.direction);
+					}else{
+						//general slide
+						dist = s.get_pos(slideNo,options.direction);
+						if(swiping!=true && direction=='right' && prev==1){
+							dist_reset = s.get_pos_first(options.direction);
+						};
+					};
+					if(options.direction == 'vertical'){
+						//vertical - reset
+						if(typeof(dist_reset)!=='undefined'){
+							if(s.transforms){
+								s.el.slides.stop(true,true).removeClass('animate').css({
+									'-webkit-transform': 'translateY('+dist_reset+')',
+									'transform': 'translateY('+dist_reset+')'
+								});
+							}else{
+								s.el.slides.stop(true,true).css({
+									top: dist_reset
+								});
+							};
+						};
+						//vertical - animate
+						if(s.transforms){
+							if(skip==true){
+								s.el.slides.stop(true,true).removeClass('animate');
+							}else{
+								s.el.slides.stop(true,true).addClass('animate');
+							};
+							s.el.slides.stop(true,true).css({
+								'-webkit-transform': 'translateY('+dist+')',
+								'transform': 'translateY('+dist+')'
+							});
+						}else{
+							s.el.slides.stop(true,true).animate({
+								top:dist
+							},time,options.easing);
+						};
+					}else{
+						//horizontal - reset
+						if(typeof(dist_reset)!=='undefined'){
+							if(s.transforms){
+								s.el.slides.stop(true,true).removeClass('animate').css({
+									'-webkit-transform': 'translateX('+dist_reset+')',
+									'transform': 'translateX('+dist_reset+')'
+								});
+							}else{
+								s.el.slides.stop(true,true).css({
+									left:dist_reset
+								});
+							};
+						};
+						//horizontal - animate
+						if(s.transforms){
+							if(skip==true){
+								s.el.slides.stop(true,true).removeClass('animate');
+							}else{
+								s.el.slides.stop(true,true).addClass('animate');
+							};
+							s.el.slides.stop(true,true).css({
+								'-webkit-transform': 'translateX('+dist+')',
+								'transform': 'translateX('+dist+')'
+							});
+						}else{
+							s.el.slides.stop(true,true).animate({
+								left:dist
+							},time,options.easing);
+						};
+					};
+					//save current position
+					s.pos_current = parseInt(dist);
+				};
+				//class
+				s.slider.find(options.el_slide).removeClass('current prev next');
+				s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current');
+				s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev');
+				s.slider.find(options.el_slide+':nth-child('+(s.next+(s.cloned==true?1:0))+')').addClass('next');
+				s.t1 = setTimeout(function(){
+					s.slider.find(options.el_slide).removeClass('current2 prev2 next2');
+					s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current2');
+					s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev2');
+					s.slider.find(options.el_slide+':nth-child('+(s.next+(s.cloned==true?1:0))+')').addClass('next2');
+				},time);
+				//interval
+				s.autoplay();
+				//arrows
+				if(slideNo == 1){
+					if(options.loop==false){
+						s.el.left.addClass('inactive');
+					};
+				}else{
+					s.el.left.removeClass('inactive');
+				};
+				//if(slideNo == s.total){
+				if(slideNo == (s.total-options.multiple+1)){
+					if(options.loop==false){
+						s.el.right.addClass('inactive');
+					};
+				}else{
+					s.el.right.removeClass('inactive');
+				};
+				//callback
+				if(typeof(options.callback)==='function'){
+					options.callback(slideNo,s.total);
+				};
+				s.t2 = setTimeout(function(){
+					if(typeof(options.callback_end)==='function'){
+						options.callback_end(slideNo,s.total);
+					};
+				},time);
+			},
+			
+			
 			//SWIPE
 			swipe: {
 				//add
@@ -941,174 +1109,6 @@
 						callback(s.current,s.total,phase,direction,distance);
 					}
 				}
-			},
-			
-			
-			//GO TO SLIDE
-			goTo: function(slideNo,skip,direction,swiping){
-				if(options.debug) console.log('%c'+options.id+' goTo '+slideNo,'color:#0053A0');
-				//time
-				var time;
-				if(skip==true){
-					time = 0;
-				}else{
-					time = options.transitionTime;
-				};
-				//store previous
-				var prev = s.current;
-				//save
-				var xprev = parseInt(slideNo-1);
-				s.current = parseInt(slideNo);
-				s.prev = parseInt(slideNo-1);
-				s.next = parseInt(slideNo+1);
-				if(s.prev<1){
-					if(options.loop==true){
-						s.prev = s.total;
-					}else{
-						s.prev = 0;
-					};
-				};
-				//if(s.next>s.total){
-				if(s.next>(s.total-options.multiple+1)){
-					if(options.loop==true){
-						s.next = 1;
-					}else{
-						s.next = 0;
-					};
-				};
-				//update nav
-				s.el.nav.find(options.el_dot).removeClass('current');
-				s.el.nav.find('#'+(options.el_dot.replace('.',''))+'_'+slideNo).addClass('current');
-				//animate slider
-				if(options.transition == 'fade'){
-					//fade
-					s.slider.find(options.el_slide).fadeOut(time);
-					s.slider.find(options.el_slide+':nth-child('+(slideNo)+')').fadeIn(time);
-				}else if(options.transition == 'slide'){
-					//slide
-					if(options.debug) console.log('%c'+options.id+' '+options.direction,'color:#0053A0');
-					//get position
-					var dist;
-					var dist_reset;
-					if(s.cloned==true && s.current==1 && prev==s.total && direction!='left' && (s.total>2 || typeof(direction)!=='undefined')){
-						//seamless slide right - animate to cloned first slide
-						dist = s.get_pos_clone_first(options.direction);
-					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping!=true && (s.total>2 || typeof(direction)!=='undefined')){
-						//seamless slide left - reset to cloned first slide, then animate left
-						dist = s.get_pos(slideNo,options.direction);
-						dist_reset = s.get_pos_clone_first(options.direction);
-					}else if(s.cloned==true && s.current==s.total && prev==1 && direction!='right' && swiping==true){
-						//seamless slide left (swiping)
-						dist = s.get_pos_left_swipe(options.direction);
-					}else{
-						//general slide
-						dist = s.get_pos(slideNo,options.direction);
-						if(swiping!=true && direction=='right' && prev==1){
-							dist_reset = s.get_pos_first(options.direction);
-						};
-					};
-					if(options.direction == 'vertical'){
-						//vertical - reset
-						if(typeof(dist_reset)!=='undefined'){
-							if(s.transforms){
-								s.el.slides.stop(true,true).removeClass('animate').css({
-									'-webkit-transform': 'translateY('+dist_reset+')',
-									'transform': 'translateY('+dist_reset+')'
-								});
-							}else{
-								s.el.slides.stop(true,true).css({
-									top: dist_reset
-								});
-							};
-						};
-						//vertical - animate
-						if(s.transforms){
-							if(skip==true){
-								s.el.slides.stop(true,true).removeClass('animate');
-							}else{
-								s.el.slides.stop(true,true).addClass('animate');
-							};
-							s.el.slides.stop(true,true).css({
-								'-webkit-transform': 'translateY('+dist+')',
-								'transform': 'translateY('+dist+')'
-							});
-						}else{
-							s.el.slides.stop(true,true).animate({
-								top:dist
-							},time,options.easing);
-						};
-					}else{
-						//horizontal - reset
-						if(typeof(dist_reset)!=='undefined'){
-							if(s.transforms){
-								s.el.slides.stop(true,true).removeClass('animate').css({
-									'-webkit-transform': 'translateX('+dist_reset+')',
-									'transform': 'translateX('+dist_reset+')'
-								});
-							}else{
-								s.el.slides.stop(true,true).css({
-									left:dist_reset
-								});
-							};
-						};
-						//horizontal - animate
-						if(s.transforms){
-							if(skip==true){
-								s.el.slides.stop(true,true).removeClass('animate');
-							}else{
-								s.el.slides.stop(true,true).addClass('animate');
-							};
-							s.el.slides.stop(true,true).css({
-								'-webkit-transform': 'translateX('+dist+')',
-								'transform': 'translateX('+dist+')'
-							});
-						}else{
-							s.el.slides.stop(true,true).animate({
-								left:dist
-							},time,options.easing);
-						};
-					};
-					//save current position
-					s.pos_current = parseInt(dist);
-				};
-				//class
-				s.slider.find(options.el_slide).removeClass('current prev next');
-				s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current');
-				s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev');
-				s.slider.find(options.el_slide+':nth-child('+(s.next+(s.cloned==true?1:0))+')').addClass('next');
-				s.t1 = setTimeout(function(){
-					s.slider.find(options.el_slide).removeClass('current2 prev2 next2');
-					s.slider.find(options.el_slide+':nth-child('+(s.current+(s.cloned==true?1:0))+')').addClass('current2');
-					s.slider.find(options.el_slide+':nth-child('+(s.prev+(s.cloned==true?1:0))+')').addClass('prev2');
-					s.slider.find(options.el_slide+':nth-child('+(s.next+(s.cloned==true?1:0))+')').addClass('next2');
-				},time);
-				//interval
-				s.autoplay();
-				//arrows
-				if(slideNo == 1){
-					if(options.loop==false){
-						s.el.left.addClass('inactive');
-					};
-				}else{
-					s.el.left.removeClass('inactive');
-				};
-				//if(slideNo == s.total){
-				if(slideNo == (s.total-options.multiple+1)){
-					if(options.loop==false){
-						s.el.right.addClass('inactive');
-					};
-				}else{
-					s.el.right.removeClass('inactive');
-				};
-				//callback
-				if(typeof(options.callback)==='function'){
-					options.callback(slideNo,s.total);
-				};
-				s.t2 = setTimeout(function(){
-					if(typeof(options.callback_end)==='function'){
-						options.callback_end(slideNo,s.total);
-					};
-				},time);
 			},
 			
 			
