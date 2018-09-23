@@ -1,6 +1,6 @@
 # Prrple Slider
 
-[By Alex Bimpson @ Prrple](http://www.prrple.com)
+[By Prrple](http://www.prrple.com)
 
 [View online examples](http://code.prrple.com/slider/)
 
